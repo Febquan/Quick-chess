@@ -1,14 +1,36 @@
 import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
-
-const Cell: React.FC = () => {
-  return <W>Component Markup</W>;
+import Pawn from "./pieces/Pawn";
+type props = {
+  id: number;
+  children?: JSX.Element;
+};
+const Cell: React.FC<props> = ({ id, children }) => {
+  return (
+    <Wrapper
+      style={{
+        backgroundColor:
+          Math.floor((id - 1) / 8) % 2 == 1
+            ? id % 2 == 1
+              ? "var(--green)"
+              : "var(--white)"
+            : id % 2 == 0
+            ? "var(--green)"
+            : "var(--white)",
+      }}
+    >
+      {children}
+    </Wrapper>
+  );
 };
 
-const W = styled.div`
-  width: 20px;
-  height: 20px;
-  background-color: red;
+const Wrapper = styled.div`
+  width: calc(var(--broad-size) / 8);
+  height: calc(var(--broad-size) / 8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default Cell;
