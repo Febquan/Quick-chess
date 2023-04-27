@@ -3,9 +3,26 @@ import styled from "styled-components";
 
 import Pawnsvg from "../../assets/pieces/Pawn";
 import Draggable from "./Drag";
-const Pawn: React.FC = () => {
+
+type props = {
+  addToCell: (addId: number, piece: JSX.Element) => void;
+  removefromCell: (id: number) => void;
+  currentId: number;
+};
+const Pawn: React.FC<props> = ({
+  addToCell,
+  removefromCell,
+  currentId,
+}: props) => {
+  // const NewSelf = React.createElement(Pawn, {
+  //   movePiece: movePiece,
+  // });
   return (
-    <Draggable>
+    <Draggable
+      addToCell={addToCell}
+      removefromCell={removefromCell}
+      currentId={currentId}
+    >
       <Wrapper>
         <Pawnsvg></Pawnsvg>
       </Wrapper>
