@@ -1,17 +1,45 @@
 import React from "react";
 import styled from "styled-components";
 import Cell from "./Cell";
-import Pawn from "./pieces/Pawn";
+
 import { useState, useEffect } from "react";
+
+import {
+  WhiteChessLocation,
+  BlackChessLocation,
+  pieceMapping,
+} from "../utility/PieceLocation";
+
+enum color {
+  Black,
+  White,
+}
+
 const Broad: React.FC = () => {
   const [cells, setCells] = useState<JSX.Element[]>([]);
+  const [site, setSite] = useState<color>(color.Black);
   useEffect(() => {
+    //draw cells
     const newCells = [];
     for (let i = 1; i <= 64; i++) {
       newCells.push(<Cell key={i} id={i}></Cell>);
     }
     setCells([...newCells]);
-  }, []);
+
+    // add full broad
+    if (site == color.Black) {
+      for (const piece of BlackChessLocation) {
+        for (const id of piece.loc) {
+          const pieceComponent = React.createElement(pieceMapping[piece.name], {
+            removefromCell: removefromCell,
+            addToCell: addToCell,
+            currentId: id,
+          });
+          addToCell(id, pieceComponent);
+        }
+      }
+    }
+  }, [site]);
 
   const addToCell = (id: number, piece: JSX.Element) => {
     setCells((prevCell) => {
@@ -38,31 +66,6 @@ const Broad: React.FC = () => {
   return (
     <>
       <Shape>{cells}</Shape>
-      <button
-        onClick={() => {
-          addToCell(
-            1,
-            <Pawn
-              removefromCell={removefromCell}
-              addToCell={addToCell}
-              currentId={1}
-            />
-          );
-        }}
-      ></button>
-      <button
-        onClick={() => {
-          addToCell(
-            2,
-            <Pawn
-              removefromCell={removefromCell}
-              addToCell={addToCell}
-              currentId={2}
-            />
-          );
-        }}
-      ></button>
-      {/* <button onClick={() => addToCell(3, <Pawn />)}>Add Pawn to Cell 3</button> */}
     </>
   );
 };

@@ -5,7 +5,7 @@ import Theme from "./style/Theme";
 import GlobalStyle from "./style/Global";
 import styled from "styled-components";
 
-import Broad from "./view/Broad";
+import Broad from "./view/broad/Broad";
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<MyTheme>(MyTheme.Dark);

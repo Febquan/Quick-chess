@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import Pawnsvg from "../../assets/pieces/Pawn";
+import WhiteRooksvg from "../../assets/pieces/WhiteRook";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
-const Pawn: React.FC<props> = ({
+const WhiteRook: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(Pawn, {
+  // const NewSelf = React.createElement(WhiteRook, {
   //   movePiece: movePiece,
   // });
   return (
@@ -20,7 +20,7 @@ const Pawn: React.FC<props> = ({
       currentId={currentId}
     >
       <Wrapper>
-        <Pawnsvg></Pawnsvg>
+        <WhiteRooksvg></WhiteRooksvg>
       </Wrapper>
     </Draggable>
   );
@@ -33,4 +33,5 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export default Pawn;
+
+export default WhiteRook;

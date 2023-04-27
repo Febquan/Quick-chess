@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Pawn from "./Pawn";
+import Pawn from "../pieces/Pawn";
 interface DraggableProps {
   children: React.ReactNode;
   addToCell: (id: number, piece: JSX.Element) => void;
@@ -73,16 +73,26 @@ const Draggable: React.FC<DraggableProps> = ({
     removefromCell(currentId);
     addToCell(
       cellId,
-      <Pawn
+      <Draggable
         removefromCell={removefromCell}
         addToCell={addToCell}
         currentId={cellId}
-      />
+      >
+        {children}
+      </Draggable>
     );
 
     setIsDragging(false);
     console.log(currentId, cellId);
-  }, [offSet.x, offSet.y, currentId, addToCell, isDragging, removefromCell]);
+  }, [
+    isDragging,
+    offSet.x,
+    offSet.y,
+    removefromCell,
+    currentId,
+    addToCell,
+    children,
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -128,7 +138,11 @@ const Draggable: React.FC<DraggableProps> = ({
         position: isDragging ? "absolute" : undefined,
         left: offSet.x,
         top: offSet.y,
-
+        height: "var(--piece-size)",
+        width: "var(--piece-size)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         cursor: "grab",
       }}
     >

@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import Pawnsvg from "../../assets/pieces/Pawn";
+import Bishopsvg from "../../assets/pieces/bishop";
 import Draggable from "../utility/Drag";
-
 import { props } from "./types";
-const Pawn: React.FC<props> = ({
+
+const Bishop: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(Pawn, {
+  // const NewSelf = React.createElement(Bishop, {
   //   movePiece: movePiece,
   // });
   return (
@@ -20,7 +20,7 @@ const Pawn: React.FC<props> = ({
       currentId={currentId}
     >
       <Wrapper>
-        <Pawnsvg></Pawnsvg>
+        <Bishopsvg></Bishopsvg>
       </Wrapper>
     </Draggable>
   );
@@ -33,4 +33,5 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export default Pawn;
+
+export default Bishop;

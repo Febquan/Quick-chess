@@ -26,7 +26,7 @@ const Cell: React.FC<props> = ({ id, children }) => {
 const Wrapper = styled.div`
   width: calc(var(--broad-size) / 8);
   height: calc(var(--broad-size) / 8);
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
 `;

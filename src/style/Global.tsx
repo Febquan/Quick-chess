@@ -79,6 +79,15 @@ const GlobalStyle = styled.createGlobalStyle`
     --green: #7d945d;
     --white: #eeeed5;
     --broad-size: 600px;
+    --piece-size: 30px;
+    @media (max-width: 768px) {
+      --broad-size: 400px;
+      --piece-size: 20px;
+    }
+    @media (max-width: 370px) {
+      --broad-size: 350px;
+      --piece-size: 20px;
+    }
   }
 
   body {
