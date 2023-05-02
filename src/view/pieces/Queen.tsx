@@ -5,16 +5,18 @@ import Queensvg from "../../assets/pieces/Queen";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
+import { PieceName, color } from "../../control/utility/GameData";
 const Queen: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(Queen, {
-  //   movePiece: movePiece,
-  // });
+  const pcolor = color.Black;
+  const name = PieceName.Queen;
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}

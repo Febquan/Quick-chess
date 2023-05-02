@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import AttackMove from "../utility/attackMove";
+import Movable from "../utility/Movable";
+
+import useBoardSize from "../../cusHooks/useBroadSize";
+
 type props = {
   id: number;
-  children?: JSX.Element;
+  children?: JSX.Element[] | JSX.Element | undefined;
+  isAttackedCell?: boolean;
+  isMovableCell?: boolean;
 };
-const Cell: React.FC<props> = ({ id, children }) => {
+const Cell: React.FC<props> = ({
+  id,
+  children,
+  isAttackedCell,
+  isMovableCell,
+}) => {
+  const broadSize = useBoardSize();
   return (
     <Wrapper
       style={{
         backgroundColor:
-          Math.floor((id - 1) / 8) % 2 == 1
+          Math.floor(id / 8) % 2 == 1
             ? id % 2 == 1
               ? "var(--green)"
               : "var(--white)"
@@ -19,6 +32,8 @@ const Cell: React.FC<props> = ({ id, children }) => {
       }}
     >
       {children}
+      {isAttackedCell && <AttackMove ></AttackMove>}
+      {isMovableCell && <Movable></Movable>}
     </Wrapper>
   );
 };

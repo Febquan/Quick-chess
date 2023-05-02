@@ -5,6 +5,8 @@ import Theme from "./style/Theme";
 import GlobalStyle from "./style/Global";
 import styled from "styled-components";
 
+import { Provider } from "react-redux";
+import store from "./control/gameState";
 import Broad from "./view/broad/Broad";
 
 const App: React.FC = () => {
@@ -22,16 +24,17 @@ const App: React.FC = () => {
     <Theme theme={theme}>
       <GlobalStyle />
       <button onClick={toggleTheme}>Toggle Theme</button>
-      <h1>Hello, World!</h1>
-      <p>This is a paragraph.</p>
       <A>
-        <Broad />
+        <Provider store={store}>
+          <Broad />
+        </Provider>
       </A>
     </Theme>
   );
 };
 
 const A = styled.div`
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

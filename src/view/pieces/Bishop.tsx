@@ -4,17 +4,19 @@ import styled from "styled-components";
 import Bishopsvg from "../../assets/pieces/bishop";
 import Draggable from "../utility/Drag";
 import { props } from "./types";
+import { PieceName, color } from "../../control/utility/GameData";
 
 const Bishop: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(Bishop, {
-  //   movePiece: movePiece,
-  // });
+  const pcolor = color.Black;
+  const name = PieceName.Bishop;
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}

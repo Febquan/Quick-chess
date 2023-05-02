@@ -5,16 +5,18 @@ import WhiteKnightsvg from "../../assets/pieces/WhiteKnight";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
+import { PieceName, color } from "../../control/utility/GameData";
 const WhiteKnight: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(WhiteKnight, {
-  //   movePiece: movePiece,
-  // });
+  const pcolor = color.White;
+  const name = PieceName.WhiteKnight;
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}

@@ -2,22 +2,36 @@ import React from "react";
 import styled from "styled-components";
 
 import WhitePawnsvg from "../../assets/pieces/WhitePawn";
-import Draggable from "../utility/Drag";
 
 import { props } from "./types";
+
+import { checkPawnMove } from "../../control/pieceControl/pawnControl";
+import { PieceName, color } from "../../control/utility/GameData";
+import Draggable from "../utility/Drag";
+
 const WhitePawn: React.FC<props> = ({
   addToCell,
   removefromCell,
+  setCellAttackMove,
+  setCellMovable,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(WhitePawn, {
-  //   movePiece: movePiece,
-  // });
+  const pcolor = color.White;
+  const name = PieceName.WhitePawn;
+
+  const checkAvailableMove = checkPawnMove;
+
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
+      checkAvailableMove={checkAvailableMove}
+      setCellAttackMove={setCellAttackMove}
+      setCellMovable={setCellMovable}
+      firstMove={true}
     >
       <Wrapper>
         <WhitePawnsvg></WhitePawnsvg>
@@ -33,5 +47,4 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 export default WhitePawn;

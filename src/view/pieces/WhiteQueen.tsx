@@ -5,16 +5,18 @@ import WhiteQueensvg from "../../assets/pieces/WhiteQueen";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
+import { PieceName, color } from "../../control/utility/GameData";
 const WhiteQueen: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(WhiteQueen, {
-  //   movePiece: movePiece,
-  // });
+  const pcolor = color.White;
+  const name = PieceName.WhiteQueen;
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}

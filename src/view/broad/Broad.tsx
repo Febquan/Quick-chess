@@ -8,38 +8,54 @@ import {
   WhiteChessLocation,
   BlackChessLocation,
   pieceMapping,
-} from "../utility/PieceLocation";
+  PieceName,
+} from "../../control/utility/GameData";
 
-enum color {
-  Black,
-  White,
-}
+import { color } from "../../control/utility/GameData";
+import { useDispatch } from "react-redux";
+import { locationSlice } from "../../control/gameState";
 
 const Broad: React.FC = () => {
   const [cells, setCells] = useState<JSX.Element[]>([]);
   const [site, setSite] = useState<color>(color.Black);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     //draw cells
     const newCells = [];
-    for (let i = 1; i <= 64; i++) {
-      newCells.push(<Cell key={i} id={i}></Cell>);
+    for (let i = 0; i < 64; i++) {
+      newCells.push(
+        <Cell
+          key={i}
+          id={i}
+          isAttackedCell={false}
+          isMovableCell={false}
+        ></Cell>
+      );
     }
     setCells([...newCells]);
 
     // add full broad
-    if (site == color.Black) {
-      for (const piece of BlackChessLocation) {
-        for (const id of piece.loc) {
-          const pieceComponent = React.createElement(pieceMapping[piece.name], {
+    dispatch(locationSlice.actions.setPlaySite(site));
+    const chessLoc =
+      site == color.Black ? BlackChessLocation : WhiteChessLocation;
+
+    for (const name in chessLoc) {
+      for (const id of chessLoc[name as PieceName].loc) {
+        const pieceComponent = React.createElement(
+          pieceMapping[name as PieceName],
+          {
             removefromCell: removefromCell,
             addToCell: addToCell,
             currentId: id,
-          });
-          addToCell(id, pieceComponent);
-        }
+            setCellAttackMove: setCellAttackMove,
+            setCellMovable: setCellMovable,
+          }
+        );
+        addToCell(id, pieceComponent);
       }
     }
-  }, [site]);
+  }, [site, dispatch]);
 
   const addToCell = (id: number, piece: JSX.Element) => {
     setCells((prevCell) => {
@@ -50,10 +66,45 @@ const Broad: React.FC = () => {
           {piece}
         </Cell>
       );
-
       return [...newCells];
     });
   };
+
+  const setCellAttackMove = (id: number[], setVal: boolean) => {
+    setCells((prevCell) => {
+      const newCells = [...prevCell];
+      for (const i of id) {
+        const index = newCells.findIndex((cell) => cell.props.id == i);
+        newCells[index] = (
+          <Cell
+            key={i}
+            id={i}
+            {...newCells[index].props}
+            isAttackedCell={setVal}
+          ></Cell>
+        );
+      }
+      return [...newCells];
+    });
+  };
+  const setCellMovable = (id: number[], setVal: boolean) => {
+    setCells((prevCell) => {
+      const newCells = [...prevCell];
+      for (const i of id) {
+        const index = newCells.findIndex((cell) => cell.props.id == i);
+        newCells[index] = (
+          <Cell
+            key={i}
+            id={i}
+            {...newCells[index].props}
+            isMovableCell={setVal}
+          ></Cell>
+        );
+      }
+      return [...newCells];
+    });
+  };
+
   const removefromCell = (id: number) => {
     setCells((prevCell) => {
       const newCells = [...prevCell];
@@ -66,6 +117,11 @@ const Broad: React.FC = () => {
   return (
     <>
       <Shape>{cells}</Shape>
+      <button
+        onClick={() => setSite(site == color.Black ? color.White : color.Black)}
+      >
+        set
+      </button>
     </>
   );
 };

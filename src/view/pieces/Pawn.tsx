@@ -2,22 +2,37 @@ import React from "react";
 import styled from "styled-components";
 
 import Pawnsvg from "../../assets/pieces/Pawn";
-import Draggable from "../utility/Drag";
 
 import { props } from "./types";
+
+import { checkPawnMove } from "../../control/pieceControl/pawnControl";
+import { PieceName, color } from "../../control/utility/GameData";
+import Draggable from "../utility/Drag";
+
 const Pawn: React.FC<props> = ({
   addToCell,
   removefromCell,
+  setCellAttackMove,
+  setCellMovable,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(Pawn, {
-  //   movePiece: movePiece,
-  // });
+  // const site = useSelector((state: RootState) => state.site);
+  const pcolor = color.Black;
+  const name = PieceName.Pawn;
+
+  const checkAvailableMove = checkPawnMove;
+
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
+      checkAvailableMove={checkAvailableMove}
+      setCellAttackMove={setCellAttackMove}
+      setCellMovable={setCellMovable}
+      firstMove={true}
     >
       <Wrapper>
         <Pawnsvg></Pawnsvg>

@@ -73,13 +73,14 @@ const GlobalStyle = styled.createGlobalStyle`
   #root,
   #__next {
     isolation: isolate;
+    height: 100%;
   }
 
   :root {
     --green: #7d945d;
     --white: #eeeed5;
     --broad-size: 600px;
-    --piece-size: 30px;
+    --piece-size: 25px;
     @media (max-width: 768px) {
       --broad-size: 400px;
       --piece-size: 20px;

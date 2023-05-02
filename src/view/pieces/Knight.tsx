@@ -5,16 +5,18 @@ import Knightsvg from "../../assets/pieces/Knight";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
+import { PieceName, color } from "../../control/utility/GameData";
 const Knight: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(Knight, {
-  //   movePiece: movePiece,
-  // });
+  const pcolor = color.Black;
+  const name = PieceName.Knight;
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}

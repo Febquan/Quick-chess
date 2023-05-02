@@ -5,16 +5,19 @@ import Kingsvg from "../../assets/pieces/King";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
+import { PieceName, color } from "../../control/utility/GameData";
+
 const King: React.FC<props> = ({
   addToCell,
   removefromCell,
   currentId,
 }: props) => {
-  // const NewSelf = React.createElement(King, {
-  //   movePiece: movePiece,
-  // });
+  const pcolor = color.Black;
+  const name = PieceName.King;
   return (
     <Draggable
+      name={name}
+      pcolor={pcolor}
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
