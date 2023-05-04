@@ -6,9 +6,12 @@ import Draggable from "../utility/Drag";
 
 import { props } from "./types";
 import { PieceName, color } from "../../control/utility/GameData";
+import { checkKnightMove } from "../../control/pieceControl/Knight Control";
 const Knight: React.FC<props> = ({
   addToCell,
   removefromCell,
+  setCellAttackMove,
+  setCellMovable,
   currentId,
 }: props) => {
   const pcolor = color.Black;
@@ -18,8 +21,11 @@ const Knight: React.FC<props> = ({
       name={name}
       pcolor={pcolor}
       addToCell={addToCell}
+      checkAvailableMove={checkKnightMove}
       removefromCell={removefromCell}
       currentId={currentId}
+      setCellAttackMove={setCellAttackMove}
+      setCellMovable={setCellMovable}
     >
       <Wrapper>
         <Knightsvg></Knightsvg>

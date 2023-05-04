@@ -9,6 +9,9 @@ type updatePayload = {
   newLoc: number;
   oldLoc: number;
 };
+type removePayload = {
+  Loc: number;
+};
 
 type initState = {
   site: color;
@@ -33,6 +36,24 @@ const locationSlice = createSlice({
       const { name, newLoc, oldLoc } = actions.payload;
       const index = state.allPieceLoc[name].loc.findIndex((id) => id == oldLoc);
       state.allPieceLoc[name].loc[index] = newLoc;
+
+      if (name == PieceName.Rook || name == PieceName.WhiteRook) {
+        const index = state.allPieceLoc[name].firstMove?.indexOf(oldLoc);
+        if (index != -1) {
+          state.allPieceLoc[name].firstMove?.splice(index as number, 1);
+        }
+      }
+    },
+    removeLoc(state, actions: PayloadAction<removePayload>) {
+      const { Loc } = actions.payload;
+
+      for (const name in state.allPieceLoc) {
+        const index = state.allPieceLoc[name as PieceName].loc.indexOf(Loc);
+        if (index != -1) {
+          state.allPieceLoc[name as PieceName].loc.splice(index, 1);
+          break;
+        }
+      }
     },
     printLoc(state) {
       console.log("Current state:", JSON.parse(JSON.stringify(state)));

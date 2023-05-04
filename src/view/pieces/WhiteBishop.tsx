@@ -6,9 +6,14 @@ import Draggable from "../utility/Drag";
 
 import { props } from "./types";
 import { PieceName, color } from "../../control/utility/GameData";
+
+import { checkBishopMove } from "../../control/pieceControl/BishopControl";
+
 const WhiteBishop: React.FC<props> = ({
   addToCell,
   removefromCell,
+  setCellAttackMove,
+  setCellMovable,
   currentId,
 }: props) => {
   const pcolor = color.White;
@@ -21,6 +26,9 @@ const WhiteBishop: React.FC<props> = ({
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
+      checkAvailableMove={checkBishopMove}
+      setCellAttackMove={setCellAttackMove}
+      setCellMovable={setCellMovable}
     >
       <Wrapper>
         <WhiteBishopsvg></WhiteBishopsvg>

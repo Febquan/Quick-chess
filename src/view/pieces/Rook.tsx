@@ -6,10 +6,14 @@ import Draggable from "../utility/Drag";
 
 import { props } from "./types";
 import { PieceName, color } from "../../control/utility/GameData";
+import { checkRookMove } from "../../control/pieceControl/RookControl";
 const Rook: React.FC<props> = ({
   addToCell,
   removefromCell,
+  setCellAttackMove,
+  setCellMovable,
   currentId,
+  firstMove,
 }: props) => {
   const pcolor = color.Black;
   const name = PieceName.Rook;
@@ -20,6 +24,10 @@ const Rook: React.FC<props> = ({
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
+      checkAvailableMove={checkRookMove}
+      setCellAttackMove={setCellAttackMove}
+      setCellMovable={setCellMovable}
+      firstMove={firstMove ? true : firstMove}
     >
       <Wrapper>
         <Rooksvg></Rooksvg>

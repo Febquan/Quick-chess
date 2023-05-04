@@ -2,7 +2,7 @@ export const idToCoordinate = (id: number) => {
   return { x: id % 8, y: Math.floor(id / 8) };
 };
 export const coordinateToId = (x: number, y: number) => {
-  if (x < 0 || x > 8 || y < 0 || y > 8) {
+  if (x < 0 || x >= 8 || y < 0 || y >= 8) {
     return -1;
   }
   return y * 8 + x;

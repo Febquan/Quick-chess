@@ -6,9 +6,13 @@ import Draggable from "../utility/Drag";
 
 import { props } from "./types";
 import { PieceName, color } from "../../control/utility/GameData";
+
+import { checkQueenMove } from "../../control/pieceControl/QueenControl";
 const Queen: React.FC<props> = ({
   addToCell,
   removefromCell,
+  setCellAttackMove,
+  setCellMovable,
   currentId,
 }: props) => {
   const pcolor = color.Black;
@@ -20,6 +24,9 @@ const Queen: React.FC<props> = ({
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
+      checkAvailableMove={checkQueenMove}
+      setCellAttackMove={setCellAttackMove}
+      setCellMovable={setCellMovable}
     >
       <Wrapper>
         <Queensvg></Queensvg>

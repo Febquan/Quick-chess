@@ -32,7 +32,7 @@ const Cell: React.FC<props> = ({
       }}
     >
       {children}
-      {isAttackedCell && <AttackMove ></AttackMove>}
+      {isAttackedCell && <AttackMove></AttackMove>}
       {isMovableCell && <Movable></Movable>}
     </Wrapper>
   );

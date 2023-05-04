@@ -4,4 +4,5 @@ export type props = {
   setCellAttackMove: (id: number[], setVal: boolean) => void;
   setCellMovable: (id: number[], setVal: boolean) => void;
   currentId: number;
+  firstMove?: boolean;
 };

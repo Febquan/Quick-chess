@@ -35,13 +35,14 @@ export type chessLocations = {
   [key in PieceName]: {
     loc: number[];
     pcolor: color;
+    firstMove?: number[];
   };
 };
 
 export const WhiteChessLocation: chessLocations = {
   [PieceName.King]: { loc: [4], pcolor: color.Black },
   [PieceName.Queen]: { loc: [3], pcolor: color.Black },
-  [PieceName.Rook]: { loc: [0, 7], pcolor: color.Black },
+  [PieceName.Rook]: { loc: [0, 7], pcolor: color.Black, firstMove: [0, 7] },
   [PieceName.Knight]: { loc: [1, 6], pcolor: color.Black },
   [PieceName.Bishop]: { loc: [2, 5], pcolor: color.Black },
   [PieceName.Pawn]: {
@@ -51,7 +52,11 @@ export const WhiteChessLocation: chessLocations = {
 
   [PieceName.WhiteKing]: { loc: [60], pcolor: color.White },
   [PieceName.WhiteQueen]: { loc: [59], pcolor: color.White },
-  [PieceName.WhiteRook]: { loc: [56, 63], pcolor: color.White },
+  [PieceName.WhiteRook]: {
+    loc: [56, 63],
+    pcolor: color.White,
+    firstMove: [56, 63],
+  },
   [PieceName.WhiteKnight]: { loc: [57, 62], pcolor: color.White },
   [PieceName.WhiteBishop]: { loc: [58, 61], pcolor: color.White },
   [PieceName.WhitePawn]: {
@@ -63,7 +68,11 @@ export const WhiteChessLocation: chessLocations = {
 export const BlackChessLocation: chessLocations = {
   [PieceName.WhiteKing]: { loc: [4], pcolor: color.White },
   [PieceName.WhiteQueen]: { loc: [3], pcolor: color.White },
-  [PieceName.WhiteRook]: { loc: [0, 7], pcolor: color.White },
+  [PieceName.WhiteRook]: {
+    loc: [0, 7],
+    pcolor: color.White,
+    firstMove: [0, 7],
+  },
   [PieceName.WhiteKnight]: { loc: [1, 6], pcolor: color.White },
   [PieceName.WhiteBishop]: { loc: [2, 5], pcolor: color.White },
   [PieceName.WhitePawn]: {
@@ -73,7 +82,7 @@ export const BlackChessLocation: chessLocations = {
 
   [PieceName.King]: { loc: [60], pcolor: color.Black },
   [PieceName.Queen]: { loc: [59], pcolor: color.Black },
-  [PieceName.Rook]: { loc: [56, 63], pcolor: color.Black },
+  [PieceName.Rook]: { loc: [56, 63], pcolor: color.Black, firstMove: [56, 63] },
   [PieceName.Knight]: { loc: [57, 62], pcolor: color.Black },
   [PieceName.Bishop]: { loc: [58, 61], pcolor: color.Black },
   [PieceName.Pawn]: {

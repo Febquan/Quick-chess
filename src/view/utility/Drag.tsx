@@ -13,7 +13,12 @@ import { props } from "../pieces/types";
 
 import Pointer from "./Pointer";
 
-import { getBoardSize } from "./helper";
+import Rook from "../pieces/Rook";
+import WhiteRook from "../pieces/WhiteRook";
+import King from "../pieces/King";
+import WhiteKing from "../pieces/WhiteKing";
+
+import { coordinateToId, getBoardSize, idToCoordinate } from "./helper";
 type DraggableProps = {
   children: React.ReactNode;
   name: PieceName;
@@ -22,9 +27,10 @@ type DraggableProps = {
   checkAvailableMove: (
     allPieceLoc: chessLocations,
     currentId: number,
-    site: color,
     pcolor: color,
-    firstMove?: boolean
+    getPreMove: boolean,
+    firstMove?: boolean,
+    site?: color
   ) => {
     validMove: number[];
     atackMove: number[];
@@ -93,9 +99,10 @@ const Draggable: React.FC<DraggableProps> = ({
     const { validMove, atackMove } = checkAvailableMove(
       allPieceLoc,
       currentId,
-      site,
       pcolor,
-      firstMove
+      false,
+      firstMove,
+      site
     );
     setDragDisplay({ validMove, atackMove });
     setCellAttackMove(atackMove, true);
@@ -125,12 +132,8 @@ const Draggable: React.FC<DraggableProps> = ({
     ]
   );
 
-  const handleMouseUp = useCallback(() => {
-    if (isDragging == false) return;
-    const { validMove, atackMove } = dragDisplay;
-    const cellId = convertOffSetToCellId(offSet.x, offSet.y);
-
-    if (validMove.includes(cellId) || atackMove.includes(cellId)) {
+  const movePiece = useCallback(
+    (cellId: number, atackMove: number[]) => {
       removefromCell(currentId);
       addToCell(
         cellId,
@@ -148,7 +151,13 @@ const Draggable: React.FC<DraggableProps> = ({
           {children}
         </Draggable>
       );
-
+      if (atackMove.includes(cellId)) {
+        dispatch(
+          locationSlice.actions.removeLoc({
+            Loc: cellId,
+          })
+        );
+      }
       dispatch(
         locationSlice.actions.updateLoc({
           name,
@@ -157,26 +166,144 @@ const Draggable: React.FC<DraggableProps> = ({
           oldLoc: currentId,
         })
       );
-    }
+    },
+    [
+      addToCell,
+      checkAvailableMove,
+      children,
+      currentId,
+      dispatch,
+      name,
+      pcolor,
+      removefromCell,
+      setCellAttackMove,
+      setCellMovable,
+    ]
+  );
 
+  const NhapThanh = useCallback(
+    (currentId: number, cellId: number, rookName: PieceName, pcolor: color) => {
+      //nhap thanh
+      const kingName =
+        pcolor == color.Black ? PieceName.King : PieceName.WhiteKing;
+      const { x, y } = idToCoordinate(currentId);
+      const { x: xRook } = idToCoordinate(cellId);
+      let rookId, kingId;
+      console.log(x, y);
+      if (xRook <= 4) {
+        // nhap thanh trai
+        rookId = coordinateToId(x - 1, y);
+        kingId = coordinateToId(x - 2, y);
+      } else {
+        // nhap thanh phai
+        rookId = coordinateToId(x + 1, y);
+        kingId = coordinateToId(x + 2, y);
+      }
+
+      const htmlRook =
+        pcolor == color.Black ? (
+          <Rook
+            addToCell={addToCell}
+            removefromCell={removefromCell}
+            setCellAttackMove={setCellAttackMove}
+            setCellMovable={setCellMovable}
+            currentId={rookId}
+            firstMove={false}
+          ></Rook>
+        ) : (
+          <WhiteRook
+            addToCell={addToCell}
+            removefromCell={removefromCell}
+            setCellAttackMove={setCellAttackMove}
+            setCellMovable={setCellMovable}
+            currentId={rookId}
+            firstMove={false}
+          ></WhiteRook>
+        );
+      removefromCell(cellId);
+      addToCell(rookId, htmlRook);
+
+      dispatch(
+        locationSlice.actions.updateLoc({
+          name: rookName,
+          pcolor,
+          newLoc: rookId,
+          oldLoc: cellId,
+        })
+      );
+
+      //King
+      const htmlKing =
+        pcolor == color.Black ? (
+          <King
+            addToCell={addToCell}
+            removefromCell={removefromCell}
+            setCellAttackMove={setCellAttackMove}
+            setCellMovable={setCellMovable}
+            currentId={kingId}
+            firstMove={false}
+          ></King>
+        ) : (
+          <WhiteKing
+            addToCell={addToCell}
+            removefromCell={removefromCell}
+            setCellAttackMove={setCellAttackMove}
+            setCellMovable={setCellMovable}
+            currentId={kingId}
+            firstMove={false}
+          ></WhiteKing>
+        );
+      removefromCell(currentId);
+
+      addToCell(kingId, htmlKing);
+
+      dispatch(
+        locationSlice.actions.updateLoc({
+          name: kingName,
+          pcolor,
+          newLoc: kingId,
+          oldLoc: currentId,
+        })
+      );
+    },
+    [addToCell, dispatch, removefromCell, setCellAttackMove, setCellMovable]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    if (isDragging == false) return;
+    const { validMove, atackMove } = dragDisplay;
+    const cellId = convertOffSetToCellId(offSet.x, offSet.y);
+
+    const rookName =
+      pcolor == color.Black ? PieceName.Rook : PieceName.WhiteRook;
+    if (
+      (name == PieceName.King || name == PieceName.WhiteKing) &&
+      allPieceLoc[rookName].firstMove?.includes(cellId)
+    ) {
+      NhapThanh(currentId, cellId, rookName, pcolor);
+    } else {
+      if (validMove.includes(cellId) || atackMove.includes(cellId)) {
+        movePiece(cellId, atackMove);
+      }
+    }
+    dispatch(locationSlice.actions.printLoc());
     setCellMovable(validMove, false);
     setCellAttackMove(atackMove, false);
     setIsDragging(false);
   }, [
-    isDragging,
+    NhapThanh,
+    allPieceLoc,
+    currentId,
+    dispatch,
     dragDisplay,
+    isDragging,
+    movePiece,
+    name,
     offSet.x,
     offSet.y,
-    setCellMovable,
-    setCellAttackMove,
-    removefromCell,
-    currentId,
-    addToCell,
-    name,
     pcolor,
-    checkAvailableMove,
-    children,
-    dispatch,
+    setCellAttackMove,
+    setCellMovable,
   ]);
 
   useEffect(() => {

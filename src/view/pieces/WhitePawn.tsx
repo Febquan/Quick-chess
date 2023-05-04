@@ -5,7 +5,7 @@ import WhitePawnsvg from "../../assets/pieces/WhitePawn";
 
 import { props } from "./types";
 
-import { checkPawnMove } from "../../control/pieceControl/pawnControl";
+import { checkPawnMove } from "../../control/pieceControl/PawnControl";
 import { PieceName, color } from "../../control/utility/GameData";
 import Draggable from "../utility/Drag";
 
