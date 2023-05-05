@@ -1,8 +1,13 @@
 import React from "react";
-
-const Rook: React.FC = () => {
+import { onclickProps } from "./type";
+const Rook: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 907 1276" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 907 1276"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M889.2 1223.45V1223.52C889.2 1242.83 873.547 1258.48 854.24 1258.48H52.3867C33.08 1258.48 17.4265 1242.83 17.4265 1223.52V1223.45C17.4265 1204.15 33.08 1188.49 52.3867 1188.49H854.24C873.547 1188.49 889.2 1204.15 889.2 1223.45Z"
         fill="#242423"

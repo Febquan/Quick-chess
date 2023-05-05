@@ -15,10 +15,52 @@ import { color } from "../../control/utility/GameData";
 import { useDispatch } from "react-redux";
 import { locationSlice } from "../../control/gameState";
 
+import PawnPromo from "../utility/PawnPromo";
+
 const Broad: React.FC = () => {
   const [cells, setCells] = useState<JSX.Element[]>([]);
   const [site, setSite] = useState<color>(color.Black);
+  const [showPawnPromo, setPawnPromo] = useState<{
+    show: boolean;
+    id: number;
+    pcolor: color;
+  }>({ show: false, id: -1, pcolor: color.Black });
+  const [promoName, setPromoName] = useState<PieceName>(PieceName.Pawn);
   const dispatch = useDispatch();
+  const handleShowPawnPromo = (id: number, pcolor: color) => {
+    setPawnPromo((prev) => {
+      return { show: !prev.show, id, pcolor };
+    });
+  };
+  const handleSetPromoName = (name: PieceName) => {
+    setPromoName(name);
+    setPawnPromo((prev) => {
+      return { ...prev, show: false };
+    });
+  };
+
+  //Pawn promotion
+  useEffect(() => {
+    const pieceComponent = React.createElement(
+      pieceMapping[promoName as PieceName],
+      {
+        removefromCell: removefromCell,
+        addToCell: addToCell,
+        currentId: showPawnPromo.id,
+        setCellAttackMove: setCellAttackMove,
+        setCellMovable: setCellMovable,
+        handleShowPawnPromo: handleShowPawnPromo,
+      }
+    );
+    addToCell(showPawnPromo.id, pieceComponent);
+    dispatch(locationSlice.actions.removeLoc({ Loc: showPawnPromo.id }));
+    dispatch(
+      locationSlice.actions.addLoc({
+        name: promoName,
+        loc: showPawnPromo.id,
+      })
+    );
+  }, [dispatch, promoName, showPawnPromo.id, showPawnPromo.pcolor]);
 
   useEffect(() => {
     //draw cells
@@ -50,6 +92,7 @@ const Broad: React.FC = () => {
             currentId: id,
             setCellAttackMove: setCellAttackMove,
             setCellMovable: setCellMovable,
+            handleShowPawnPromo: handleShowPawnPromo,
           }
         );
         addToCell(id, pieceComponent);
@@ -116,12 +159,18 @@ const Broad: React.FC = () => {
 
   return (
     <>
+      {showPawnPromo.show && (
+        <PawnPromo
+          handleSetPromoName={handleSetPromoName}
+          pcolor={showPawnPromo.pcolor}
+        ></PawnPromo>
+      )}
       <Shape>{cells}</Shape>
-      <button
+      {/* <button
         onClick={() => setSite(site == color.Black ? color.White : color.Black)}
       >
         set
-      </button>
+      </button> */}
     </>
   );
 };

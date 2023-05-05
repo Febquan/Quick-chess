@@ -1,8 +1,13 @@
 import React from "react";
-
-const WhiteRook: React.FC = () => {
+import { onclickProps } from "./type";
+const WhiteRook: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 907 1276" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 907 1276"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M17.4 1223.56V1223.63C17.4 1242.93 33.0534 1258.59 52.3601 1258.59H854.213C873.52 1258.59 889.174 1242.93 889.174 1223.63V1223.56C889.174 1204.25 873.52 1188.6 854.213 1188.6H52.3601C33.0534 1188.6 17.4 1204.25 17.4 1223.56Z"
         fill="#BCB8B1"

@@ -1,8 +1,13 @@
 import React from "react";
-
-const WhiteQueen: React.FC = () => {
+import { onclickProps } from "./type";
+const WhiteQueen: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 908 1698" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 908 1698"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M17.9331 1644.8V1644.87C17.9331 1664.17 33.5863 1679.83 52.893 1679.83H854.733C874.04 1679.83 889.693 1664.17 889.693 1644.87V1644.8C889.693 1625.49 874.04 1609.84 854.733 1609.84H52.893C33.5863 1609.84 17.9331 1625.49 17.9331 1644.8Z"
         fill="#BCB8B1"

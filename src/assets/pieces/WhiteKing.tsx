@@ -1,8 +1,13 @@
 import React from "react";
-
-const WhiteKing: React.FC = () => {
+import { onclickProps } from "./type";
+const WhiteKing: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 907 1992" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 907 1992"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M17.4666 1938.8V1938.87C17.4666 1958.17 33.1065 1973.83 52.4132 1973.83H854.266C873.573 1973.83 889.226 1958.17 889.226 1938.87V1938.8C889.226 1919.49 873.573 1903.84 854.266 1903.84H52.4132C33.1065 1903.84 17.4666 1919.49 17.4666 1938.8Z"
         fill="#BCB8B1"

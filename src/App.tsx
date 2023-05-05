@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import store from "./control/gameState";
 import Broad from "./view/broad/Broad";
 
+import PawnPromo from "./view/utility/PawnPromo";
 const App: React.FC = () => {
   const [theme, setTheme] = useState<MyTheme>(MyTheme.Dark);
 
@@ -23,8 +24,8 @@ const App: React.FC = () => {
   return (
     <Theme theme={theme}>
       <GlobalStyle />
-      <button onClick={toggleTheme}>Toggle Theme</button>
       <A>
+        {/* <button onClick={toggleTheme}>Toggle Theme</button> */}
         <Provider store={store}>
           <Broad />
         </Provider>
@@ -35,6 +36,7 @@ const App: React.FC = () => {
 
 const A = styled.div`
   height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

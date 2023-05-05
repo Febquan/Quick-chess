@@ -3,6 +3,7 @@ import {
   coordinateToId,
   isSameSite,
   isExit,
+  isEnpassantAttack,
 } from "../../view/utility/helper";
 
 import { color, chessLocations } from "../utility/GameData";
@@ -43,6 +44,15 @@ export const checkPawnMove = (
           atackMove.push(el);
         }
     });
+    //add Enpassant attack
+
+    [leftattack, rightattack].forEach((el) => {
+      if (isEnpassantAttack(el, allPieceLoc, pcolor))
+        if (el != -1) {
+          atackMove.push(el);
+        }
+    });
+
     return { validMove, atackMove };
   } else {
     const leftattack = coordinateToId(x - 1, y + dir);

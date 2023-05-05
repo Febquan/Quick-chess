@@ -1,8 +1,13 @@
 import React from "react";
-
-const WhitePawn: React.FC = () => {
+import { onclickProps } from "./type";
+const WhitePawn: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 908 1254" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 908 1254"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M18 1201.48V1201.56C18 1220.87 33.6532 1236.51 52.9599 1236.51H854.813C874.107 1236.51 889.76 1220.87 889.76 1201.56V1201.48C889.76 1182.19 874.107 1166.53 854.813 1166.53H52.9599C33.6532 1166.53 18 1182.19 18 1201.48Z"
         fill="#BCB8B1"

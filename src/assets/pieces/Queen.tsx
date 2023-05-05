@@ -1,8 +1,13 @@
 import React from "react";
-
-const Queen: React.FC = () => {
+import { onclickProps } from "./type";
+const Queen: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 907 1697" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 907 1697"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M889.169 1644.43V1644.49C889.169 1663.8 873.519 1679.45 854.213 1679.45H52.3619C33.0562 1679.45 17.4067 1663.8 17.4067 1644.49V1644.43C17.4067 1625.12 33.0562 1609.47 52.3619 1609.47H854.213C873.519 1609.47 889.169 1625.12 889.169 1644.43Z"
         fill="#242423"

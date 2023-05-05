@@ -36,6 +36,7 @@ export type chessLocations = {
     loc: number[];
     pcolor: color;
     firstMove?: number[];
+    enpassant?: number[];
   };
 };
 
@@ -48,6 +49,7 @@ export const WhiteChessLocation: chessLocations = {
   [PieceName.Pawn]: {
     loc: [8, 9, 10, 11, 12, 13, 14, 15],
     pcolor: color.Black,
+    enpassant: [],
   },
 
   [PieceName.WhiteKing]: { loc: [60], pcolor: color.White },
@@ -62,6 +64,7 @@ export const WhiteChessLocation: chessLocations = {
   [PieceName.WhitePawn]: {
     loc: [48, 49, 50, 51, 52, 53, 54, 55],
     pcolor: color.White,
+    enpassant: [],
   },
 };
 
@@ -78,6 +81,7 @@ export const BlackChessLocation: chessLocations = {
   [PieceName.WhitePawn]: {
     loc: [8, 9, 10, 11, 12, 13, 14, 15],
     pcolor: color.White,
+    enpassant: [],
   },
 
   [PieceName.King]: { loc: [60], pcolor: color.Black },
@@ -88,6 +92,7 @@ export const BlackChessLocation: chessLocations = {
   [PieceName.Pawn]: {
     loc: [48, 49, 50, 51, 52, 53, 54, 55],
     pcolor: color.Black,
+    enpassant: [],
   },
 };
 

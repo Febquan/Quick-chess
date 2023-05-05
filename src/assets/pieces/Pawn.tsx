@@ -1,8 +1,8 @@
 import React from "react";
-
-const Pawn: React.FC = () => {
+import { onclickProps } from "./type";
+const Pawn: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 907 1254" fill="none">
+    <svg onClick={onClick} viewBox="0 0 907 1254" fill="none">
       <path
         d="M796.448 1151H692.316C709.747 1151 723.385 1135.37 720.499 1118.17C707.2 1039 650.04 974.427 627.856 951.96C622.479 946.467 615.179 943.413 607.481 943.413H711.615C719.311 943.413 726.612 946.467 731.988 951.96C754.173 974.427 811.332 1039 824.632 1118.17C827.519 1135.37 813.879 1151 796.448 1151Z"
         fill="#474747"

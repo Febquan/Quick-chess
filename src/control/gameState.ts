@@ -9,6 +9,11 @@ type updatePayload = {
   newLoc: number;
   oldLoc: number;
 };
+
+type addPayload = {
+  name: PieceName;
+  loc: number;
+};
 type removePayload = {
   Loc: number;
 };
@@ -44,6 +49,10 @@ const locationSlice = createSlice({
         }
       }
     },
+    addLoc(state, actions: PayloadAction<addPayload>) {
+      const { name, loc } = actions.payload;
+      state.allPieceLoc[name].loc.push(loc);
+    },
     removeLoc(state, actions: PayloadAction<removePayload>) {
       const { Loc } = actions.payload;
 
@@ -55,6 +64,20 @@ const locationSlice = createSlice({
         }
       }
     },
+    addLocEnPassant(state, actions: PayloadAction<addPayload>) {
+      const { name, loc } = actions.payload;
+      state.allPieceLoc[name as PieceName].enpassant?.push(loc);
+    },
+    removeEnPassant(state, actions: PayloadAction<addPayload>) {
+      const { name, loc } = actions.payload;
+      console.log(name, loc);
+      const index =
+        state.allPieceLoc[name as PieceName].enpassant?.indexOf(loc);
+      if (index != -1 && index != null) {
+        state.allPieceLoc[name as PieceName].enpassant?.splice(index, 1);
+      }
+    },
+
     printLoc(state) {
       console.log("Current state:", JSON.parse(JSON.stringify(state)));
     },

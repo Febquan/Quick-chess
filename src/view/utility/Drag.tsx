@@ -18,7 +18,12 @@ import WhiteRook from "../pieces/WhiteRook";
 import King from "../pieces/King";
 import WhiteKing from "../pieces/WhiteKing";
 
-import { coordinateToId, getBoardSize, idToCoordinate } from "./helper";
+import {
+  coordinateToId,
+  getBoardSize,
+  idToCoordinate,
+  isEnpassantAttack,
+} from "./helper";
 type DraggableProps = {
   children: React.ReactNode;
   name: PieceName;
@@ -35,6 +40,7 @@ type DraggableProps = {
     validMove: number[];
     atackMove: number[];
   };
+  handleShowPawnPromo?: (id: number, pcolor: color) => void;
 } & props;
 let broadSize = 0;
 
@@ -56,6 +62,7 @@ const Draggable: React.FC<DraggableProps> = ({
   setCellAttackMove,
   setCellMovable,
   firstMove,
+  handleShowPawnPromo,
 }) => {
   const { allPieceLoc, site } = useSelector((state: RootState) => ({
     allPieceLoc: state.allPieceLoc,
@@ -147,6 +154,11 @@ const Draggable: React.FC<DraggableProps> = ({
           setCellAttackMove={setCellAttackMove}
           setCellMovable={setCellMovable}
           firstMove={false}
+          handleShowPawnPromo={
+            name == PieceName.Pawn || name == PieceName.WhitePawn
+              ? handleShowPawnPromo
+              : undefined
+          }
         >
           {children}
         </Draggable>
@@ -173,6 +185,7 @@ const Draggable: React.FC<DraggableProps> = ({
       children,
       currentId,
       dispatch,
+      handleShowPawnPromo,
       name,
       pcolor,
       removefromCell,
@@ -284,6 +297,61 @@ const Draggable: React.FC<DraggableProps> = ({
     } else {
       if (validMove.includes(cellId) || atackMove.includes(cellId)) {
         movePiece(cellId, atackMove);
+
+        //PAWN PROMOTE
+        if (
+          (name == PieceName.Pawn || name == PieceName.WhitePawn) &&
+          Math.floor(cellId / 8) == (pcolor == color.Black ? 0 : 7) &&
+          handleShowPawnPromo
+        ) {
+          handleShowPawnPromo(cellId, pcolor);
+        }
+        //EN PASSANT
+        const { y: y1, x: x1 } = idToCoordinate(currentId);
+        const { y: y2, x: x2 } = idToCoordinate(cellId);
+
+        if (name == PieceName.Pawn || name == PieceName.WhitePawn) {
+          if (!firstMove) {
+            if (atackMove.includes(cellId)) {
+              if (isEnpassantAttack(cellId, allPieceLoc, pcolor)) {
+                removefromCell(
+                  coordinateToId(x2, y2 + (pcolor == color.Black ? 1 : -1))
+                );
+                dispatch(
+                  locationSlice.actions.removeEnPassant({
+                    name:
+                      name == PieceName.Pawn
+                        ? PieceName.WhitePawn
+                        : PieceName.Pawn,
+                    loc: coordinateToId(x2, y2),
+                  })
+                );
+                dispatch(
+                  locationSlice.actions.removeLoc({
+                    Loc: coordinateToId(
+                      x2,
+                      y2 + (pcolor == color.Black ? 1 : -1)
+                    ),
+                  })
+                );
+              }
+            }
+            dispatch(
+              locationSlice.actions.removeEnPassant({
+                name,
+                loc: coordinateToId(x1, y1 + (pcolor == color.Black ? 1 : -1)),
+              })
+            );
+          }
+          if (firstMove && Math.abs(y1 - y2) == 2) {
+            dispatch(
+              locationSlice.actions.addLocEnPassant({
+                name,
+                loc: coordinateToId(x1, (y1 + y2) / 2),
+              })
+            );
+          }
+        }
       }
     }
     dispatch(locationSlice.actions.printLoc());
@@ -296,6 +364,8 @@ const Draggable: React.FC<DraggableProps> = ({
     currentId,
     dispatch,
     dragDisplay,
+    firstMove,
+    handleShowPawnPromo,
     isDragging,
     movePiece,
     name,

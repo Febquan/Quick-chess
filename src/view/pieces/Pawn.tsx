@@ -15,6 +15,7 @@ const Pawn: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleShowPawnPromo,
 }: props) => {
   // const site = useSelector((state: RootState) => state.site);
   const pcolor = color.Black;
@@ -33,6 +34,7 @@ const Pawn: React.FC<props> = ({
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
       firstMove={true}
+      handleShowPawnPromo={handleShowPawnPromo}
     >
       <Wrapper>
         <Pawnsvg></Pawnsvg>

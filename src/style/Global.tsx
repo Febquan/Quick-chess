@@ -79,10 +79,10 @@ const GlobalStyle = styled.createGlobalStyle`
   :root {
     --green: #7d945d;
     --white: #eeeed5;
-    --broad-size: 600px;
-    --piece-size: 25px;
+    --broad-size: 800px;
+    --piece-size: 36px;
     @media (max-width: 768px) {
-      --broad-size: 400px;
+      --broad-size: 600px;
       --piece-size: 20px;
     }
     @media (max-width: 370px) {

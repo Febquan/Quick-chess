@@ -1,8 +1,13 @@
 import React from "react";
-
-const WhiteBishop: React.FC = () => {
+import { onclickProps } from "./type";
+const WhiteBishop: React.FC<onclickProps> = ({ onClick }) => {
   return (
-    <svg viewBox="0 0 907 1517" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 907 1517"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M17.3733 1464.48V1464.56C17.3733 1483.87 33.0132 1499.51 52.3199 1499.51H854.173C873.48 1499.51 889.133 1483.87 889.133 1464.56V1464.48C889.133 1445.19 873.48 1429.53 854.173 1429.53H52.3199C33.0132 1429.53 17.3733 1445.19 17.3733 1464.48Z"
         fill="#BCB8B1"

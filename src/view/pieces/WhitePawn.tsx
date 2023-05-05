@@ -9,12 +9,15 @@ import { checkPawnMove } from "../../control/pieceControl/PawnControl";
 import { PieceName, color } from "../../control/utility/GameData";
 import Draggable from "../utility/Drag";
 
+type PawnProps = props & { handleShowPawnPromo: VoidFunction };
+
 const WhitePawn: React.FC<props> = ({
   addToCell,
   removefromCell,
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleShowPawnPromo,
 }: props) => {
   const pcolor = color.White;
   const name = PieceName.WhitePawn;
@@ -32,6 +35,7 @@ const WhitePawn: React.FC<props> = ({
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
       firstMove={true}
+      handleShowPawnPromo={handleShowPawnPromo}
     >
       <Wrapper>
         <WhitePawnsvg></WhitePawnsvg>

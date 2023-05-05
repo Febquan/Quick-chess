@@ -38,3 +38,17 @@ export const getBoardSize = () => {
     getComputedStyle(document.documentElement).getPropertyValue("--broad-size")
   );
 };
+
+export const isEnpassantAttack = (
+  id: number,
+  locInfo: chessLocations,
+  pcolor: color
+) => {
+  for (const value of Object.values(locInfo)) {
+    if (value.enpassant?.includes(id) && value.pcolor != pcolor) {
+      return true;
+    }
+  }
+
+  return false;
+};

@@ -18,6 +18,7 @@ const Cell: React.FC<props> = ({
   isMovableCell,
 }) => {
   const broadSize = useBoardSize();
+  const cellSize = broadSize / 8;
   return (
     <Wrapper
       style={{
@@ -31,9 +32,10 @@ const Cell: React.FC<props> = ({
             : "var(--white)",
       }}
     >
+      {/* {id} */}
       {children}
-      {isAttackedCell && <AttackMove></AttackMove>}
-      {isMovableCell && <Movable></Movable>}
+      {isAttackedCell && <AttackMove cellSize={cellSize}></AttackMove>}
+      {isMovableCell && <Movable cellSize={cellSize}></Movable>}
     </Wrapper>
   );
 };
