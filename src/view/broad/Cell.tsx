@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import AttackMove from "../utility/attackMove";
-import Movable from "../utility/Movable";
+import AttackMove from "./utility/attackMove";
+import Movable from "./utility/Movable";
 
 import useBoardSize from "../../cusHooks/useBroadSize";
 
@@ -18,6 +18,7 @@ const Cell: React.FC<props> = ({
   isMovableCell,
 }) => {
   const broadSize = useBoardSize();
+
   const cellSize = broadSize / 8;
   return (
     <Wrapper

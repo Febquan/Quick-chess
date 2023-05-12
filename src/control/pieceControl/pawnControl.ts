@@ -4,7 +4,7 @@ import {
   isSameSite,
   isExit,
   isEnpassantAttack,
-} from "../../view/utility/helper";
+} from "../../view/broad/utility/helper";
 
 import { color, chessLocations } from "../utility/GameData";
 

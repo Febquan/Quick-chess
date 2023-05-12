@@ -3,7 +3,7 @@ import {
   coordinateToId,
   isSameSite,
   isExit,
-} from "../../view/utility/helper";
+} from "../../view/broad/utility/helper";
 
 import { color, chessLocations } from "../utility/GameData";
 

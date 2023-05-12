@@ -1,28 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 
-import Pawnsvg from "../../assets/pieces/Pawn";
-
-import { props } from "./types";
-
-import { checkPawnMove } from "../../control/pieceControl/PawnControl";
-import { PieceName, color } from "../../control/utility/GameData";
+import Rooksvg from "../../../assets/pieces/Rook";
 import Draggable from "../utility/Drag";
 
-const Pawn: React.FC<props> = ({
+import { props } from "./types";
+import { PieceName, color } from "../../../control/utility/GameData";
+import { checkRookMove } from "../../../control/pieceControl/RookControl";
+const Rook: React.FC<props> = ({
   addToCell,
   removefromCell,
   setCellAttackMove,
   setCellMovable,
   currentId,
-  handleShowPawnPromo,
+  firstMove,
 }: props) => {
-  // const site = useSelector((state: RootState) => state.site);
   const pcolor = color.Black;
-  const name = PieceName.Pawn;
-
-  const checkAvailableMove = checkPawnMove;
-
+  const name = PieceName.Rook;
   return (
     <Draggable
       name={name}
@@ -30,14 +24,13 @@ const Pawn: React.FC<props> = ({
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
-      checkAvailableMove={checkAvailableMove}
+      checkAvailableMove={checkRookMove}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
-      firstMove={true}
-      handleShowPawnPromo={handleShowPawnPromo}
+      firstMove={firstMove ? true : firstMove}
     >
       <Wrapper>
-        <Pawnsvg></Pawnsvg>
+        <Rooksvg></Rooksvg>
       </Wrapper>
     </Draggable>
   );
@@ -50,4 +43,4 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export default Pawn;
+export default Rook;

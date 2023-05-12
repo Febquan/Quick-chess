@@ -13,13 +13,15 @@ import {
 
 import { color } from "../../control/utility/GameData";
 import { useDispatch } from "react-redux";
-import { locationSlice } from "../../control/gameState";
+import { locationSlice } from "../../store/gameState";
 
-import PawnPromo from "../utility/PawnPromo";
+import PawnPromo from "./utility/PawnPromo";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const Broad: React.FC = () => {
   const [cells, setCells] = useState<JSX.Element[]>([]);
-  const [site, setSite] = useState<color>(color.Black);
+  const site = useSelector((state: RootState) => state.location.site);
   const [showPawnPromo, setPawnPromo] = useState<{
     show: boolean;
     id: number;
@@ -78,7 +80,6 @@ const Broad: React.FC = () => {
     setCells([...newCells]);
 
     // add full broad
-    dispatch(locationSlice.actions.setPlaySite(site));
     const chessLoc =
       site == color.Black ? BlackChessLocation : WhiteChessLocation;
 
@@ -166,11 +167,6 @@ const Broad: React.FC = () => {
         ></PawnPromo>
       )}
       <Shape>{cells}</Shape>
-      {/* <button
-        onClick={() => setSite(site == color.Black ? color.White : color.Black)}
-      >
-        set
-      </button> */}
     </>
   );
 };
@@ -186,6 +182,8 @@ const Shape = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 10px;
+
+  box-shadow: 0px 0px 20px hsl(0deg 0% 0% / 0.2);
 `;
 
 export default Broad;

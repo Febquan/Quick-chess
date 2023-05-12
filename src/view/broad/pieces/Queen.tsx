@@ -1,22 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 
-import WhiteQueensvg from "../../assets/pieces/WhiteQueen";
+import Queensvg from "../../../assets/pieces/Queen";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
-import { PieceName, color } from "../../control/utility/GameData";
+import { PieceName, color } from "../../../control/utility/GameData";
 
-import { checkQueenMove } from "../../control/pieceControl/QueenControl";
-const WhiteQueen: React.FC<props> = ({
+import { checkQueenMove } from "../../../control/pieceControl/QueenControl";
+const Queen: React.FC<props> = ({
   addToCell,
   removefromCell,
   setCellAttackMove,
   setCellMovable,
   currentId,
 }: props) => {
-  const pcolor = color.White;
-  const name = PieceName.WhiteQueen;
+  const pcolor = color.Black;
+  const name = PieceName.Queen;
   return (
     <Draggable
       name={name}
@@ -29,7 +29,7 @@ const WhiteQueen: React.FC<props> = ({
       setCellMovable={setCellMovable}
     >
       <Wrapper>
-        <WhiteQueensvg></WhiteQueensvg>
+        <Queensvg></Queensvg>
       </Wrapper>
     </Draggable>
   );
@@ -43,4 +43,4 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-export default WhiteQueen;
+export default Queen;

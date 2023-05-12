@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-import WhiteKnightsvg from "../../assets/pieces/WhiteKnight";
+import WhiteBishopsvg from "../../../assets/pieces/WhiteBishop";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
-import { PieceName, color } from "../../control/utility/GameData";
-import { checkKnightMove } from "../../control/pieceControl/Knight Control";
+import { PieceName, color } from "../../../control/utility/GameData";
 
-const WhiteKnight: React.FC<props> = ({
+import { checkBishopMove } from "../../../control/pieceControl/BishopControl";
+
+const WhiteBishop: React.FC<props> = ({
   addToCell,
   removefromCell,
   setCellAttackMove,
@@ -16,20 +17,21 @@ const WhiteKnight: React.FC<props> = ({
   currentId,
 }: props) => {
   const pcolor = color.White;
-  const name = PieceName.WhiteKnight;
+  const name = PieceName.WhiteBishop;
+
   return (
     <Draggable
       name={name}
       pcolor={pcolor}
       addToCell={addToCell}
-      checkAvailableMove={checkKnightMove}
       removefromCell={removefromCell}
       currentId={currentId}
+      checkAvailableMove={checkBishopMove}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
     >
       <Wrapper>
-        <WhiteKnightsvg></WhiteKnightsvg>
+        <WhiteBishopsvg></WhiteBishopsvg>
       </Wrapper>
     </Draggable>
   );
@@ -42,5 +44,4 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-export default WhiteKnight;
+export default WhiteBishop;

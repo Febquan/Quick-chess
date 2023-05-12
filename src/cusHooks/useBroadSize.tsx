@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getBoardSize } from "../view/utility/helper";
+import { getBoardSize } from "../view/broad/utility/helper";
 
 function useBoardSize() {
   const [boardSize, setBoardSize] = useState(getBoardSize());

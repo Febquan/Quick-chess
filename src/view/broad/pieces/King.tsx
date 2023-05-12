@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-import Queensvg from "../../assets/pieces/Queen";
+import Kingsvg from "../../../assets/pieces/King";
 import Draggable from "../utility/Drag";
 
 import { props } from "./types";
-import { PieceName, color } from "../../control/utility/GameData";
+import { PieceName, color } from "../../../control/utility/GameData";
+import { checkKingMove } from "../../../control/pieceControl/KingControl";
 
-import { checkQueenMove } from "../../control/pieceControl/QueenControl";
-const Queen: React.FC<props> = ({
+const King: React.FC<props> = ({
   addToCell,
   removefromCell,
   setCellAttackMove,
@@ -16,20 +16,21 @@ const Queen: React.FC<props> = ({
   currentId,
 }: props) => {
   const pcolor = color.Black;
-  const name = PieceName.Queen;
+  const name = PieceName.King;
   return (
     <Draggable
       name={name}
       pcolor={pcolor}
       addToCell={addToCell}
+      checkAvailableMove={checkKingMove}
       removefromCell={removefromCell}
       currentId={currentId}
-      checkAvailableMove={checkQueenMove}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
+      firstMove={true}
     >
       <Wrapper>
-        <Queensvg></Queensvg>
+        <Kingsvg></Kingsvg>
       </Wrapper>
     </Draggable>
   );
@@ -43,4 +44,4 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-export default Queen;
+export default King;

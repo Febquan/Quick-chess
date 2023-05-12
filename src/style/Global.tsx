@@ -79,22 +79,16 @@ const GlobalStyle = styled.createGlobalStyle`
   :root {
     --green: #7d945d;
     --white: #eeeed5;
-    --broad-size: 800px;
-    --piece-size: 36px;
-    @media (max-width: 768px) {
-      --broad-size: 600px;
-      --piece-size: 20px;
-    }
-    @media (max-width: 370px) {
-      --broad-size: 350px;
-      --piece-size: 20px;
-    }
+    --broad-size: 75vh;
+    --piece-size: 3.5vh;
+    --header-height: 5.5vh;
   }
 
   body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: Arial, sans-serif;
+    font-family: "Roboto";
+    font-weight: 500;
     transition: background-color 0.5s ease, color 0.5s ease;
   }
 `;

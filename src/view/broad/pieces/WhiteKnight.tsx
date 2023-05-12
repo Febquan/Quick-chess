@@ -1,44 +1,35 @@
 import React from "react";
 import styled from "styled-components";
 
-import WhitePawnsvg from "../../assets/pieces/WhitePawn";
-
-import { props } from "./types";
-
-import { checkPawnMove } from "../../control/pieceControl/PawnControl";
-import { PieceName, color } from "../../control/utility/GameData";
+import WhiteKnightsvg from "../../../assets/pieces/WhiteKnight";
 import Draggable from "../utility/Drag";
 
-type PawnProps = props & { handleShowPawnPromo: VoidFunction };
+import { props } from "./types";
+import { PieceName, color } from "../../../control/utility/GameData";
+import { checkKnightMove } from "../../../control/pieceControl/Knight Control";
 
-const WhitePawn: React.FC<props> = ({
+const WhiteKnight: React.FC<props> = ({
   addToCell,
   removefromCell,
   setCellAttackMove,
   setCellMovable,
   currentId,
-  handleShowPawnPromo,
 }: props) => {
   const pcolor = color.White;
-  const name = PieceName.WhitePawn;
-
-  const checkAvailableMove = checkPawnMove;
-
+  const name = PieceName.WhiteKnight;
   return (
     <Draggable
       name={name}
       pcolor={pcolor}
       addToCell={addToCell}
+      checkAvailableMove={checkKnightMove}
       removefromCell={removefromCell}
       currentId={currentId}
-      checkAvailableMove={checkAvailableMove}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
-      firstMove={true}
-      handleShowPawnPromo={handleShowPawnPromo}
     >
       <Wrapper>
-        <WhitePawnsvg></WhitePawnsvg>
+        <WhiteKnightsvg></WhiteKnightsvg>
       </Wrapper>
     </Draggable>
   );
@@ -51,4 +42,5 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export default WhitePawn;
+
+export default WhiteKnight;

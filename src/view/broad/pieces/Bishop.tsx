@@ -1,21 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
-import WhiteRooksvg from "../../assets/pieces/WhiteRook";
+import Bishopsvg from "../../../assets/pieces/bishop";
 import Draggable from "../utility/Drag";
-
 import { props } from "./types";
-import { PieceName, color } from "../../control/utility/GameData";
-import { checkRookMove } from "../../control/pieceControl/RookControl";
-const WhiteRook: React.FC<props> = ({
+import { PieceName, color } from "../../../control/utility/GameData";
+
+import { checkBishopMove } from "../../../control/pieceControl/BishopControl";
+const Bishop: React.FC<props> = ({
   addToCell,
   removefromCell,
   setCellAttackMove,
   setCellMovable,
   currentId,
 }: props) => {
-  const pcolor = color.White;
-  const name = PieceName.WhiteRook;
+  const pcolor = color.Black;
+  const name = PieceName.Bishop;
   return (
     <Draggable
       name={name}
@@ -23,13 +23,12 @@ const WhiteRook: React.FC<props> = ({
       addToCell={addToCell}
       removefromCell={removefromCell}
       currentId={currentId}
-      checkAvailableMove={checkRookMove}
+      checkAvailableMove={checkBishopMove}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
-      firstMove={true}
     >
       <Wrapper>
-        <WhiteRooksvg></WhiteRooksvg>
+        <Bishopsvg></Bishopsvg>
       </Wrapper>
     </Draggable>
   );
@@ -43,4 +42,4 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-export default WhiteRook;
+export default Bishop;

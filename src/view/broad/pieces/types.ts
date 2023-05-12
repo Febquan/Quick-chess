@@ -1,4 +1,4 @@
-import { color } from "../../control/utility/GameData";
+import { color } from "../../../control/utility/GameData";
 export type props = {
   addToCell: (addId: number, piece: JSX.Element) => void;
   removefromCell: (id: number) => void;

@@ -8,7 +8,7 @@ export const coordinateToId = (x: number, y: number) => {
   return y * 8 + x;
 };
 
-import { chessLocations, color } from "../../control/utility/GameData";
+import { chessLocations, color } from "../../../control/utility/GameData";
 export const isExit = (id: number, locInfo: chessLocations) => {
   for (const value of Object.values(locInfo)) {
     if (value.loc.includes(id)) {
@@ -34,8 +34,14 @@ export const isSameSite = (
 };
 
 export const getBoardSize = () => {
-  return parseFloat(
-    getComputedStyle(document.documentElement).getPropertyValue("--broad-size")
+  return (
+    (window.innerHeight *
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--broad-size"
+        )
+      )) /
+    100
   );
 };
 

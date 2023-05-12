@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import Rook from "../../assets/pieces/Rook";
-import WhiteRook from "../../assets/pieces/WhiteRook";
-import Bishop from "../../assets/pieces/bishop";
-import WhiteBishop from "../../assets/pieces/WhiteBishop";
-import Queen from "../../assets/pieces/Queen";
-import WhiteQueen from "../../assets/pieces/WhiteQueen";
-import Knight from "../../assets/pieces/Knight";
-import WhiteKnight from "../../assets/pieces/WhiteKnight";
+import Rook from "../../../assets/pieces/Rook";
+import WhiteRook from "../../../assets/pieces/WhiteRook";
+import Bishop from "../../../assets/pieces/bishop";
+import WhiteBishop from "../../../assets/pieces/WhiteBishop";
+import Queen from "../../../assets/pieces/Queen";
+import WhiteQueen from "../../../assets/pieces/WhiteQueen";
+import Knight from "../../../assets/pieces/Knight";
+import WhiteKnight from "../../../assets/pieces/WhiteKnight";
 
-import { color, PieceName } from "../../control/utility/GameData";
+import { color, PieceName } from "../../../control/utility/GameData";
 
 type props = {
   pcolor?: color;

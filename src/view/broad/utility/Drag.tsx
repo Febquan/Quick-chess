@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { RootState } from "../../control/gameState";
-import { locationSlice } from "../../control/gameState";
+import { RootState } from "../../../store/store";
+import { locationSlice } from "../../../store/gameState";
 import {
   PieceName,
   chessLocations,
   color,
-} from "../../control/utility/GameData";
+} from "../../../control/utility/GameData";
 import { props } from "../pieces/types";
 
 import Pointer from "./Pointer";
@@ -17,6 +17,8 @@ import Rook from "../pieces/Rook";
 import WhiteRook from "../pieces/WhiteRook";
 import King from "../pieces/King";
 import WhiteKing from "../pieces/WhiteKing";
+
+const audio = new Audio("../../../sound/move-self.mp3");
 
 import {
   coordinateToId,
@@ -65,8 +67,8 @@ const Draggable: React.FC<DraggableProps> = ({
   handleShowPawnPromo,
 }) => {
   const { allPieceLoc, site } = useSelector((state: RootState) => ({
-    allPieceLoc: state.allPieceLoc,
-    site: state.site,
+    allPieceLoc: state.location.allPieceLoc,
+    site: state.location.site,
   }));
   const dispatch = useDispatch();
   const [dragDisplay, setDragDisplay] = useState<{
@@ -98,6 +100,12 @@ const Draggable: React.FC<DraggableProps> = ({
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     setInitPos();
+    const px = event.clientX - parentPosition.x - rectPosition.x;
+    const py = event.clientY - parentPosition.y - rectPosition.y;
+    setPointerOffSet({
+      x: (Math.floor((px / broadSize) * 8) * broadSize) / 8,
+      y: (Math.floor((py / broadSize) * 8) * broadSize) / 8,
+    });
     const rect = event.currentTarget.getBoundingClientRect();
     const mouseXInRect = event.clientX - rect.left;
     const mouseyInRect = event.clientY - rect.top;
@@ -163,6 +171,7 @@ const Draggable: React.FC<DraggableProps> = ({
           {children}
         </Draggable>
       );
+      audio.play();
       if (atackMove.includes(cellId)) {
         dispatch(
           locationSlice.actions.removeLoc({
@@ -202,7 +211,6 @@ const Draggable: React.FC<DraggableProps> = ({
       const { x, y } = idToCoordinate(currentId);
       const { x: xRook } = idToCoordinate(cellId);
       let rookId, kingId;
-      console.log(x, y);
       if (xRook <= 4) {
         // nhap thanh trai
         rookId = coordinateToId(x - 1, y);
@@ -269,7 +277,7 @@ const Draggable: React.FC<DraggableProps> = ({
       removefromCell(currentId);
 
       addToCell(kingId, htmlKing);
-
+      audio.play();
       dispatch(
         locationSlice.actions.updateLoc({
           name: kingName,
@@ -372,6 +380,7 @@ const Draggable: React.FC<DraggableProps> = ({
     offSet.x,
     offSet.y,
     pcolor,
+    removefromCell,
     setCellAttackMove,
     setCellMovable,
   ]);

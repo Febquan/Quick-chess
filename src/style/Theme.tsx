@@ -1,19 +1,19 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
-
+import { ConfigProvider } from "antd";
 export enum MyTheme {
   Dark,
   Light,
 }
 
 const lightTheme = {
-  primaryColor: "#008080",
-  backgroundColor: "#fff",
+  primaryColor: "hsl(248, 53%, 58%)",
+  backgroundColor: "#e4e4e4",
   textColor: "#000",
 };
 
 const darkTheme = {
-  primaryColor: "#00CED1",
+  primaryColor: "hsl(248, 53%, 58%)",
   backgroundColor: "#282c34",
   textColor: "#fff",
 };
@@ -25,9 +25,17 @@ type props = {
 
 const Theme: React.FC<props> = ({ theme, children }) => {
   return (
-    <ThemeProvider theme={theme == MyTheme.Dark ? darkTheme : lightTheme}>
-      {children}
-    </ThemeProvider>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "hsl(248, 53%, 58%)",
+        },
+      }}
+    >
+      <ThemeProvider theme={theme == MyTheme.Dark ? darkTheme : lightTheme}>
+        {children}
+      </ThemeProvider>
+    </ConfigProvider>
   );
 };
 

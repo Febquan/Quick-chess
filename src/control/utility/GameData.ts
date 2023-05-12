@@ -1,15 +1,16 @@
-import Pawn from "../../view/pieces/Pawn";
-import WhitePawn from "../../view/pieces/WhitePawn";
-import Bishop from "../../view/pieces/Bishop";
-import WhiteBishop from "../../view/pieces/WhiteBishop";
-import Rook from "../../view/pieces/Rook";
-import WhiteRook from "../../view/pieces/WhiteRook";
-import Knight from "../../view/pieces/Knight";
-import WhiteKnight from "../../view/pieces/WhiteKnight";
-import Queen from "../../view/pieces/Queen";
-import WhiteQueen from "../../view/pieces/WhiteQueen";
-import King from "../../view/pieces/King";
-import WhiteKing from "../../view/pieces/WhiteKing";
+import { props } from "./../../view/broad/pieces/types";
+import Pawn from "../../view/broad/pieces/Pawn";
+import WhitePawn from "../../view//broad/pieces/WhitePawn";
+import Bishop from "../../view//broad/pieces/Bishop";
+import WhiteBishop from "../../view//broad/pieces/WhiteBishop";
+import Rook from "../../view//broad/pieces/Rook";
+import WhiteRook from "../../view//broad/pieces/WhiteRook";
+import Knight from "../../view//broad/pieces/Knight";
+import WhiteKnight from "../../view//broad/pieces/WhiteKnight";
+import Queen from "../../view//broad/pieces/Queen";
+import WhiteQueen from "../../view//broad/pieces/WhiteQueen";
+import King from "../../view//broad/pieces/King";
+import WhiteKing from "../../view//broad/pieces/WhiteKing";
 
 export enum PieceName {
   King = "King",
@@ -96,7 +97,6 @@ export const BlackChessLocation: chessLocations = {
   },
 };
 
-import { props } from "../../view/pieces/types";
 export const pieceMapping: Record<PieceName, React.FC<props>> = {
   [PieceName.King]: King,
   [PieceName.WhiteKing]: WhiteKing,

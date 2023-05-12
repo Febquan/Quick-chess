@@ -1,7 +1,10 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { BlackChessLocation, WhiteChessLocation } from "./utility/GameData";
+import {
+  BlackChessLocation,
+  WhiteChessLocation,
+} from "../control/utility/GameData";
 import { PayloadAction } from "@reduxjs/toolkit/dist/createAction";
-import { color, chessLocations, PieceName } from "./utility/GameData";
+import { color, chessLocations, PieceName } from "../control/utility/GameData";
 
 type updatePayload = {
   name: PieceName;
@@ -21,16 +24,33 @@ type removePayload = {
 type initState = {
   site: color;
   allPieceLoc: chessLocations;
+  time: number;
+  plusTime: number;
+  timeOut: number;
 };
+
 const initialState: initState = {
   site: color.Black,
   allPieceLoc: BlackChessLocation,
+  time: 90,
+  plusTime: 30,
+  timeOut: 2,
 };
 
 const locationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
+    setTime(state, action) {
+      state.time = action.payload;
+    },
+    setPlusTime(state, action) {
+      state.plusTime = action.payload;
+    },
+    setTimeOut(state, action) {
+      state.timeOut = action.payload;
+    },
+
     setPlaySite(state, action) {
       const siteColor: color = action.payload;
       state.allPieceLoc =
@@ -84,9 +104,5 @@ const locationSlice = createSlice({
   },
 });
 
-const store = configureStore({
-  reducer: locationSlice.reducer,
-});
-export type RootState = ReturnType<typeof store.getState>;
 export { locationSlice };
-export default store;
+export default locationSlice.reducer;

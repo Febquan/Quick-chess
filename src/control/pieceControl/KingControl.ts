@@ -4,7 +4,7 @@ import {
   coordinateToId,
   isSameSite,
   isExit,
-} from "../../view/utility/helper";
+} from "../../view/broad/utility/helper";
 
 import { color, chessLocations, PieceName } from "../utility/GameData";
 import { checkBishopMove } from "./BishopControl";
