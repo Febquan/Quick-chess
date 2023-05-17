@@ -33,7 +33,6 @@ const Cell: React.FC<props> = ({
             : "var(--white)",
       }}
     >
-      {/* {id} */}
       {children}
       {isAttackedCell && <AttackMove cellSize={cellSize}></AttackMove>}
       {isMovableCell && <Movable cellSize={cellSize}></Movable>}

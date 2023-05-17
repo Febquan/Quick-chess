@@ -1,18 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { io, Socket } from "socket.io-client";
+import { createSlice } from "@reduxjs/toolkit";
+import { Socket } from "socket.io-client";
 
 interface initState {
   socket: Socket | undefined;
 }
 
 const initialState: initState = {
-  socket: io(import.meta.env.VITE_BACK_END_URL),
+  socket: undefined,
 };
 
 const SocketSlice = createSlice({
   name: "websocket",
   initialState,
-  reducers: {},
+  reducers: {
+    initSocket(state, action) {
+      state.socket = action.payload;
+    },
+  },
 });
 
 export { SocketSlice };

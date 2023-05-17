@@ -14,6 +14,7 @@ const WhiteQueen: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.White;
   const name = PieceName.WhiteQueen;
@@ -27,6 +28,7 @@ const WhiteQueen: React.FC<props> = ({
       checkAvailableMove={checkQueenMove}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <WhiteQueensvg></WhiteQueensvg>

@@ -14,6 +14,7 @@ const WhiteKnight: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.White;
   const name = PieceName.WhiteKnight;
@@ -27,6 +28,7 @@ const WhiteKnight: React.FC<props> = ({
       currentId={currentId}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <WhiteKnightsvg></WhiteKnightsvg>

@@ -8,6 +8,14 @@ export const coordinateToId = (x: number, y: number) => {
   return y * 8 + x;
 };
 
+export const ReflexId = (id: number) => {
+  const { x, y } = idToCoordinate(id);
+  const mid = 4;
+  const xReflex = mid * 2 - (x + 1);
+  const yReflex = mid * 2 - (y + 1);
+  return coordinateToId(xReflex, yReflex);
+};
+
 import { chessLocations, color } from "../../../control/utility/GameData";
 export const isExit = (id: number, locInfo: chessLocations) => {
   for (const value of Object.values(locInfo)) {

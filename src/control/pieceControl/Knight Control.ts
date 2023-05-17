@@ -127,6 +127,6 @@ export const checkKnightMove = (
       getPreMove
     );
   }
-  console.log({ validMove, atackMove });
+  // console.log({ validMove, atackMove });
   return { validMove, atackMove };
 };

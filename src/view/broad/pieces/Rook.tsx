@@ -14,6 +14,7 @@ const Rook: React.FC<props> = ({
   setCellMovable,
   currentId,
   firstMove,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.Black;
   const name = PieceName.Rook;
@@ -28,6 +29,7 @@ const Rook: React.FC<props> = ({
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
       firstMove={firstMove ? true : firstMove}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <Rooksvg></Rooksvg>

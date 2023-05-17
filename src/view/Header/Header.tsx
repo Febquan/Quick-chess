@@ -21,7 +21,7 @@ const Header: React.FC<props> = ({ children, toggleTheme, theme }) => {
   const { isLogin, name } = useSelector((state: RootState) => ({
     ...state.user,
   }));
-  console.log(name);
+
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isSignUpModalOpen, setisSignUpModalOpen] = useState<boolean>(false);
   const showLoginModal = () => {

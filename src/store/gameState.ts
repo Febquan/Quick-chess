@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
   BlackChessLocation,
   WhiteChessLocation,
@@ -27,22 +27,54 @@ type initState = {
   time: number;
   plusTime: number;
   timeOut: number;
+  gameState: GameState;
+  turn: boolean;
+  isTimeOut: boolean;
+  isChecked: boolean;
+  check: boolean;
+  roomId?: string;
 };
 
-const initialState: initState = {
-  site: color.Black,
-  allPieceLoc: BlackChessLocation,
+export enum GameState {
+  FINDGAME,
+  NOTREADY,
+  READY,
+  INGAME,
+  ENDGAME,
+}
+export const initialState: initState = {
+  site: color.White,
+  allPieceLoc: WhiteChessLocation,
   time: 90,
   plusTime: 30,
   timeOut: 2,
+  gameState: GameState.FINDGAME,
+  turn: false,
+  isTimeOut: false,
+  roomId: undefined,
+  isChecked: false,
+  check: false,
 };
 
 const locationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
+    setGameState(state, action: PayloadAction<GameState>) {
+      state.gameState = action.payload;
+    },
+    setCheckMate(
+      state,
+      action: PayloadAction<{ check: boolean; isChecked: boolean }>
+    ) {
+      state.check = action.payload.check;
+      state.isChecked = action.payload.isChecked;
+    },
     setTime(state, action) {
       state.time = action.payload;
+    },
+    setRoomId(state, action) {
+      state.roomId = action.payload;
     },
     setPlusTime(state, action) {
       state.plusTime = action.payload;
@@ -50,19 +82,43 @@ const locationSlice = createSlice({
     setTimeOut(state, action) {
       state.timeOut = action.payload;
     },
-
+    afterUseTimeOut(state) {
+      state.timeOut = state.timeOut - 1;
+    },
+    setTurn(state, action) {
+      state.turn = action.payload;
+    },
+    setShowTimeOut(state, action) {
+      state.isTimeOut = action.payload;
+    },
     setPlaySite(state, action) {
       const siteColor: color = action.payload;
       state.allPieceLoc =
         siteColor == color.Black ? BlackChessLocation : WhiteChessLocation;
       state.site = siteColor;
     },
+    resetLoc(state, actions) {
+      state.allPieceLoc =
+        actions.payload == color.Black
+          ? BlackChessLocation
+          : WhiteChessLocation;
+    },
+    renderGivenLoc(state, actions) {
+      state.allPieceLoc = actions.payload;
+    },
     updateLoc(state, actions: PayloadAction<updatePayload>) {
       const { name, newLoc, oldLoc } = actions.payload;
       const index = state.allPieceLoc[name].loc.findIndex((id) => id == oldLoc);
       state.allPieceLoc[name].loc[index] = newLoc;
 
-      if (name == PieceName.Rook || name == PieceName.WhiteRook) {
+      if (
+        name == PieceName.Rook ||
+        name == PieceName.WhiteRook ||
+        name == PieceName.Pawn ||
+        name == PieceName.WhitePawn ||
+        name == PieceName.WhiteKing ||
+        name == PieceName.King
+      ) {
         const index = state.allPieceLoc[name].firstMove?.indexOf(oldLoc);
         if (index != -1) {
           state.allPieceLoc[name].firstMove?.splice(index as number, 1);
@@ -90,7 +146,6 @@ const locationSlice = createSlice({
     },
     removeEnPassant(state, actions: PayloadAction<addPayload>) {
       const { name, loc } = actions.payload;
-      console.log(name, loc);
       const index =
         state.allPieceLoc[name as PieceName].enpassant?.indexOf(loc);
       if (index != -1 && index != null) {
@@ -98,9 +153,9 @@ const locationSlice = createSlice({
       }
     },
 
-    printLoc(state) {
-      console.log("Current state:", JSON.parse(JSON.stringify(state)));
-    },
+    // printLoc(state) {
+    //   console.log("Current state:", JSON.parse(JSON.stringify(state)));
+    // },
   },
 });
 

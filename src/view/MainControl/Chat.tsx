@@ -1,21 +1,19 @@
 import React, { ReactNode, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button, Input, Space } from "antd";
-import { MySocket } from "../../api/socket";
-import { Socket } from "socket.io-client";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 type props = {
   children?: ReactNode;
-  roomId: string;
 };
-const Chat: React.FC<props> = ({ children, roomId }) => {
+const Chat: React.FC<props> = () => {
   const [message, setMessage] = useState<string>("");
   const [allMessage, setallMessage] = useState<ReactNode[]>([]);
-
+  const socket = useSelector((state: RootState) => state.socket.socket);
+  const roomId = useSelector((state: RootState) => state.location.roomId);
   useEffect(() => {
-    let socket: Socket | undefined;
     const handleReciveMess = async () => {
-      socket = await MySocket.getConection();
       socket?.on("SendMessage", (mess) => {
         setallMessage((prev) => [
           <OponentChat key={prev.length + 1}>
@@ -34,12 +32,15 @@ const Chat: React.FC<props> = ({ children, roomId }) => {
       });
     };
     handleReciveMess();
-  }, []); // Run this effect only once on component mount
+    return () => {
+      socket?.off("SendMessage");
+      socket?.off("ServerSendMessage");
+    };
+  }, [socket]); // Run this effect only once on component mount
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
   const handleChat = async () => {
-    const socket = await MySocket.getConection();
     if (!message) return;
     socket?.emit("SendMessage", message, roomId);
     setallMessage((prev) => [

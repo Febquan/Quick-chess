@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
-import { locationSlice } from "../../../store/gameState";
+import { GameState, locationSlice } from "../../../store/gameState";
 import {
   PieceName,
   chessLocations,
@@ -18,14 +18,17 @@ import WhiteRook from "../pieces/WhiteRook";
 import King from "../pieces/King";
 import WhiteKing from "../pieces/WhiteKing";
 
-const audio = new Audio("../../../sound/move-self.mp3");
+import store from "../../../store/store";
 
+const audio = new Audio("../../../sound/move-self.mp3");
+import { isCheckMate } from "../../../control/pieceControl/KingControl";
 import {
   coordinateToId,
   getBoardSize,
   idToCoordinate,
   isEnpassantAttack,
 } from "./helper";
+
 type DraggableProps = {
   children: React.ReactNode;
   name: PieceName;
@@ -63,13 +66,19 @@ const Draggable: React.FC<DraggableProps> = ({
   checkAvailableMove,
   setCellAttackMove,
   setCellMovable,
-  firstMove,
   handleShowPawnPromo,
+  handleMakeMoveTimer,
 }) => {
-  const { allPieceLoc, site } = useSelector((state: RootState) => ({
-    allPieceLoc: state.location.allPieceLoc,
-    site: state.location.site,
-  }));
+  const roomId = useSelector((state: RootState) => state.location.roomId);
+  const gameState = useSelector((state: RootState) => state.location.gameState);
+  const socket = useSelector((state: RootState) => state.socket.socket);
+  const turn = useSelector((state: RootState) => state.location.turn);
+
+  const allPieceLoc = useSelector(
+    (state: RootState) => state.location.allPieceLoc
+  );
+
+  const site = useSelector((state: RootState) => state.location.site);
   const dispatch = useDispatch();
   const [dragDisplay, setDragDisplay] = useState<{
     validMove: number[];
@@ -99,6 +108,15 @@ const Draggable: React.FC<DraggableProps> = ({
   }
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    // console.log(turn, gameState);
+    if (
+      pcolor != site ||
+      gameState == GameState.NOTREADY ||
+      gameState == GameState.ENDGAME ||
+      !turn
+    ) {
+      return;
+    }
     setInitPos();
     const px = event.clientX - parentPosition.x - rectPosition.x;
     const py = event.clientY - parentPosition.y - rectPosition.y;
@@ -111,6 +129,8 @@ const Draggable: React.FC<DraggableProps> = ({
     const mouseyInRect = event.clientY - rect.top;
     setRectPosition({ x: mouseXInRect, y: mouseyInRect });
     setIsDragging(true);
+    const firstMove = allPieceLoc[name].firstMove?.includes(currentId);
+    // console.log(name, firstMove, allPieceLoc[name].firstMove);
     const { validMove, atackMove } = checkAvailableMove(
       allPieceLoc,
       currentId,
@@ -167,6 +187,7 @@ const Draggable: React.FC<DraggableProps> = ({
               ? handleShowPawnPromo
               : undefined
           }
+          handleMakeMoveTimer={handleMakeMoveTimer}
         >
           {children}
         </Draggable>
@@ -194,6 +215,7 @@ const Draggable: React.FC<DraggableProps> = ({
       children,
       currentId,
       dispatch,
+      handleMakeMoveTimer,
       handleShowPawnPromo,
       name,
       pcolor,
@@ -230,6 +252,7 @@ const Draggable: React.FC<DraggableProps> = ({
             setCellMovable={setCellMovable}
             currentId={rookId}
             firstMove={false}
+            handleMakeMoveTimer={handleMakeMoveTimer}
           ></Rook>
         ) : (
           <WhiteRook
@@ -239,6 +262,7 @@ const Draggable: React.FC<DraggableProps> = ({
             setCellMovable={setCellMovable}
             currentId={rookId}
             firstMove={false}
+            handleMakeMoveTimer={handleMakeMoveTimer}
           ></WhiteRook>
         );
       removefromCell(cellId);
@@ -263,6 +287,7 @@ const Draggable: React.FC<DraggableProps> = ({
             setCellMovable={setCellMovable}
             currentId={kingId}
             firstMove={false}
+            handleMakeMoveTimer={handleMakeMoveTimer}
           ></King>
         ) : (
           <WhiteKing
@@ -272,6 +297,7 @@ const Draggable: React.FC<DraggableProps> = ({
             setCellMovable={setCellMovable}
             currentId={kingId}
             firstMove={false}
+            handleMakeMoveTimer={handleMakeMoveTimer}
           ></WhiteKing>
         );
       removefromCell(currentId);
@@ -287,7 +313,39 @@ const Draggable: React.FC<DraggableProps> = ({
         })
       );
     },
-    [addToCell, dispatch, removefromCell, setCellAttackMove, setCellMovable]
+    [
+      addToCell,
+      dispatch,
+      handleMakeMoveTimer,
+      removefromCell,
+      setCellAttackMove,
+      setCellMovable,
+    ]
+  );
+
+  const handleMakeMoveSocket = useCallback(
+    (cellId: number) => {
+      if (gameState != GameState.INGAME) return;
+      socket?.emit(
+        "MakeMove",
+        store.getState().location.allPieceLoc,
+        roomId,
+        name,
+        cellId
+      );
+      console.log(
+        "mad",
+        isCheckMate(store.getState().location.allPieceLoc, site)
+      );
+      dispatch(
+        locationSlice.actions.setCheckMate(
+          isCheckMate(store.getState().location.allPieceLoc, site)
+        )
+      );
+      dispatch(locationSlice.actions.setTurn(false));
+      handleMakeMoveTimer();
+    },
+    [dispatch, gameState, handleMakeMoveTimer, name, roomId, site, socket]
   );
 
   const handleMouseUp = useCallback(() => {
@@ -299,32 +357,34 @@ const Draggable: React.FC<DraggableProps> = ({
       pcolor == color.Black ? PieceName.Rook : PieceName.WhiteRook;
     if (
       (name == PieceName.King || name == PieceName.WhiteKing) &&
-      allPieceLoc[rookName].firstMove?.includes(cellId)
+      allPieceLoc[rookName].firstMove?.includes(cellId) &&
+      atackMove.includes(cellId)
     ) {
       NhapThanh(currentId, cellId, rookName, pcolor);
+      handleMakeMoveSocket(cellId);
     } else {
       if (validMove.includes(cellId) || atackMove.includes(cellId)) {
         movePiece(cellId, atackMove);
 
         //PAWN PROMOTE
+
         if (
           (name == PieceName.Pawn || name == PieceName.WhitePawn) &&
-          Math.floor(cellId / 8) == (pcolor == color.Black ? 0 : 7) &&
+          Math.floor(cellId / 8) == 0 &&
           handleShowPawnPromo
         ) {
           handleShowPawnPromo(cellId, pcolor);
+          return;
         }
         //EN PASSANT
         const { y: y1, x: x1 } = idToCoordinate(currentId);
         const { y: y2, x: x2 } = idToCoordinate(cellId);
-
+        const firstMove = allPieceLoc[name].firstMove?.includes(currentId);
         if (name == PieceName.Pawn || name == PieceName.WhitePawn) {
           if (!firstMove) {
             if (atackMove.includes(cellId)) {
               if (isEnpassantAttack(cellId, allPieceLoc, pcolor)) {
-                removefromCell(
-                  coordinateToId(x2, y2 + (pcolor == color.Black ? 1 : -1))
-                );
+                removefromCell(coordinateToId(x2, y2 + 1));
                 dispatch(
                   locationSlice.actions.removeEnPassant({
                     name:
@@ -336,10 +396,7 @@ const Draggable: React.FC<DraggableProps> = ({
                 );
                 dispatch(
                   locationSlice.actions.removeLoc({
-                    Loc: coordinateToId(
-                      x2,
-                      y2 + (pcolor == color.Black ? 1 : -1)
-                    ),
+                    Loc: coordinateToId(x2, y2 + 1),
                   })
                 );
               }
@@ -347,7 +404,7 @@ const Draggable: React.FC<DraggableProps> = ({
             dispatch(
               locationSlice.actions.removeEnPassant({
                 name,
-                loc: coordinateToId(x1, y1 + (pcolor == color.Black ? 1 : -1)),
+                loc: coordinateToId(x1, y1 + 1),
               })
             );
           }
@@ -360,9 +417,10 @@ const Draggable: React.FC<DraggableProps> = ({
             );
           }
         }
+        handleMakeMoveSocket(cellId);
       }
     }
-    dispatch(locationSlice.actions.printLoc());
+    // dispatch(locationSlice.actions.printLoc());
     setCellMovable(validMove, false);
     setCellAttackMove(atackMove, false);
     setIsDragging(false);
@@ -372,7 +430,7 @@ const Draggable: React.FC<DraggableProps> = ({
     currentId,
     dispatch,
     dragDisplay,
-    firstMove,
+    handleMakeMoveSocket,
     handleShowPawnPromo,
     isDragging,
     movePiece,

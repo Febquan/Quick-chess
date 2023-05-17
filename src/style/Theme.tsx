@@ -9,12 +9,14 @@ export enum MyTheme {
 const lightTheme = {
   primaryColor: "hsl(248, 53%, 58%)",
   backgroundColor: "#e4e4e4",
+  backgroundColorLight: "#d5d5d5",
   textColor: "#000",
 };
 
 const darkTheme = {
   primaryColor: "hsl(248, 53%, 58%)",
   backgroundColor: "#282c34",
+  backgroundColorLight: "#1c1e24",
   textColor: "#fff",
 };
 

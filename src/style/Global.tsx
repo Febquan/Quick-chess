@@ -5,6 +5,7 @@ const GlobalStyle = styled.createGlobalStyle`
   :root {
     --primary-color: ${(props) => props.theme.primaryColor};
     --background-color: ${(props) => props.theme.backgroundColor};
+    --background-color-light: ${(props) => props.theme.backgroundColorLight};
     --text-color: ${(props) => props.theme.textColor};
   }
 

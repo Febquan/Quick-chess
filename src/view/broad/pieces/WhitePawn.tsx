@@ -18,6 +18,7 @@ const WhitePawn: React.FC<props> = ({
   setCellMovable,
   currentId,
   handleShowPawnPromo,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.White;
   const name = PieceName.WhitePawn;
@@ -36,6 +37,7 @@ const WhitePawn: React.FC<props> = ({
       setCellMovable={setCellMovable}
       firstMove={true}
       handleShowPawnPromo={handleShowPawnPromo}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <WhitePawnsvg></WhitePawnsvg>

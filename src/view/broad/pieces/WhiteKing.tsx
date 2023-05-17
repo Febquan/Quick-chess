@@ -14,6 +14,7 @@ const WhiteKing: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.White;
   const name = PieceName.WhiteKing;
@@ -28,6 +29,7 @@ const WhiteKing: React.FC<props> = ({
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
       firstMove={true}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <WhiteKingsvg></WhiteKingsvg>

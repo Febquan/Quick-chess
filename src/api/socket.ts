@@ -4,6 +4,7 @@ let Myconection: Socket;
 export const MySocket = {
   async init(httpServer: string) {
     try {
+      console.log("initSocket");
       Myconection = await io(httpServer);
       return Myconection;
     } catch (err) {

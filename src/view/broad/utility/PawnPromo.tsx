@@ -11,35 +11,94 @@ import Knight from "../../../assets/pieces/Knight";
 import WhiteKnight from "../../../assets/pieces/WhiteKnight";
 
 import { color, PieceName } from "../../../control/utility/GameData";
-
+import { pieceMapping } from "../../../control/utility/GameData";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
+import { useDispatch } from "react-redux";
+import { locationSlice } from "../../../store/gameState";
+import { GameState } from "../../../store/gameState";
+import store from "../../../store/store";
 type props = {
-  pcolor?: color;
-  handleSetPromoName: (name: PieceName) => void;
+  pcolor: color;
+  removefromCell: (id: number) => void;
+  addToCell: (id: number, piece: JSX.Element) => void;
+  setCellAttackMove: (id: number[], setVal: boolean) => void;
+  setCellMovable: (id: number[], setVal: boolean) => void;
+  handleShowPawnPromo: (id: number, pcolor: color) => void;
+  showPawnPromo: {
+    show: boolean;
+    id: number;
+    pcolor: color;
+  };
+  handleMakeMoveTimer: VoidFunction;
 };
-const PawnPromo: React.FC<props> = ({ pcolor, handleSetPromoName }) => {
+const PawnPromo: React.FC<props> = ({
+  pcolor,
+  removefromCell,
+  addToCell,
+  setCellAttackMove,
+  setCellMovable,
+  showPawnPromo,
+  handleShowPawnPromo,
+  handleMakeMoveTimer,
+}) => {
+  const socket = useSelector((state: RootState) => state.socket.socket);
+  const gameState = useSelector((state: RootState) => state.location.gameState);
+  const dispatch = useDispatch();
+  const roomId = useSelector((state: RootState) => state.location.roomId);
+  const handleOnClick = (promoName: PieceName) => {
+    const pieceComponent = React.createElement(
+      pieceMapping[promoName as PieceName],
+      {
+        removefromCell: removefromCell,
+        addToCell: addToCell,
+        currentId: showPawnPromo.id,
+        setCellAttackMove: setCellAttackMove,
+        setCellMovable: setCellMovable,
+        handleShowPawnPromo: handleShowPawnPromo,
+        handleMakeMoveTimer: handleMakeMoveTimer,
+      }
+    );
+
+    addToCell(showPawnPromo.id, pieceComponent);
+    dispatch(locationSlice.actions.removeLoc({ Loc: showPawnPromo.id }));
+    dispatch(
+      locationSlice.actions.addLoc({
+        name: promoName,
+        loc: showPawnPromo.id,
+      })
+    );
+    handleShowPawnPromo(showPawnPromo.id, pcolor);
+    if (gameState != GameState.INGAME) return;
+    // console.log("MAKEMOVE");
+    socket?.emit("MakeMove", store.getState().location.allPieceLoc, roomId);
+    handleMakeMoveTimer();
+    dispatch(locationSlice.actions.setTurn(false));
+  };
+
   const black = [
     <Rook
       key={1}
       onClick={() => {
-        handleSetPromoName(PieceName.Rook);
+        handleOnClick(PieceName.Rook);
       }}
     />,
     <Queen
       key={2}
       onClick={() => {
-        handleSetPromoName(PieceName.Queen);
+        handleOnClick(PieceName.Queen);
       }}
     />,
     <Bishop
       key={3}
       onClick={() => {
-        handleSetPromoName(PieceName.Bishop);
+        handleOnClick(PieceName.Bishop);
       }}
     />,
     <Knight
       key={4}
       onClick={() => {
-        handleSetPromoName(PieceName.Knight);
+        handleOnClick(PieceName.Knight);
       }}
     />,
   ];
@@ -47,25 +106,25 @@ const PawnPromo: React.FC<props> = ({ pcolor, handleSetPromoName }) => {
     <WhiteRook
       key={1}
       onClick={() => {
-        handleSetPromoName(PieceName.WhiteRook);
+        handleOnClick(PieceName.WhiteRook);
       }}
     />,
     <WhiteQueen
       key={2}
       onClick={() => {
-        handleSetPromoName(PieceName.WhiteQueen);
+        handleOnClick(PieceName.WhiteQueen);
       }}
     />,
     <WhiteBishop
       key={3}
       onClick={() => {
-        handleSetPromoName(PieceName.WhiteBishop);
+        handleOnClick(PieceName.WhiteBishop);
       }}
     />,
     <WhiteKnight
       key={4}
       onClick={() => {
-        handleSetPromoName(PieceName.WhiteKnight);
+        handleOnClick(PieceName.WhiteKnight);
       }}
     />,
   ];

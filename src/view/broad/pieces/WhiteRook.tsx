@@ -13,6 +13,7 @@ const WhiteRook: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.White;
   const name = PieceName.WhiteRook;
@@ -27,6 +28,7 @@ const WhiteRook: React.FC<props> = ({
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
       firstMove={true}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <WhiteRooksvg></WhiteRooksvg>

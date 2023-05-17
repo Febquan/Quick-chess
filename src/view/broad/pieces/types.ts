@@ -7,4 +7,5 @@ export type props = {
   currentId: number;
   firstMove?: boolean;
   handleShowPawnPromo?: (id: number, pcolor: color) => void;
+  handleMakeMoveTimer: VoidFunction;
 };

@@ -42,7 +42,7 @@ export type chessLocations = {
 };
 
 export const WhiteChessLocation: chessLocations = {
-  [PieceName.King]: { loc: [4], pcolor: color.Black },
+  [PieceName.King]: { loc: [4], pcolor: color.Black, firstMove: [4] },
   [PieceName.Queen]: { loc: [3], pcolor: color.Black },
   [PieceName.Rook]: { loc: [0, 7], pcolor: color.Black, firstMove: [0, 7] },
   [PieceName.Knight]: { loc: [1, 6], pcolor: color.Black },
@@ -50,10 +50,11 @@ export const WhiteChessLocation: chessLocations = {
   [PieceName.Pawn]: {
     loc: [8, 9, 10, 11, 12, 13, 14, 15],
     pcolor: color.Black,
+    firstMove: [8, 9, 10, 11, 12, 13, 14, 15],
     enpassant: [],
   },
 
-  [PieceName.WhiteKing]: { loc: [60], pcolor: color.White },
+  [PieceName.WhiteKing]: { loc: [60], pcolor: color.White, firstMove: [60] },
   [PieceName.WhiteQueen]: { loc: [59], pcolor: color.White },
   [PieceName.WhiteRook]: {
     loc: [56, 63],
@@ -65,13 +66,14 @@ export const WhiteChessLocation: chessLocations = {
   [PieceName.WhitePawn]: {
     loc: [48, 49, 50, 51, 52, 53, 54, 55],
     pcolor: color.White,
+    firstMove: [48, 49, 50, 51, 52, 53, 54, 55],
     enpassant: [],
   },
 };
 
 export const BlackChessLocation: chessLocations = {
-  [PieceName.WhiteKing]: { loc: [4], pcolor: color.White },
-  [PieceName.WhiteQueen]: { loc: [3], pcolor: color.White },
+  [PieceName.WhiteKing]: { loc: [3], pcolor: color.White, firstMove: [3] },
+  [PieceName.WhiteQueen]: { loc: [4], pcolor: color.White },
   [PieceName.WhiteRook]: {
     loc: [0, 7],
     pcolor: color.White,
@@ -82,17 +84,19 @@ export const BlackChessLocation: chessLocations = {
   [PieceName.WhitePawn]: {
     loc: [8, 9, 10, 11, 12, 13, 14, 15],
     pcolor: color.White,
+    firstMove: [8, 9, 10, 11, 12, 13, 14, 15],
     enpassant: [],
   },
 
-  [PieceName.King]: { loc: [60], pcolor: color.Black },
-  [PieceName.Queen]: { loc: [59], pcolor: color.Black },
+  [PieceName.King]: { loc: [59], pcolor: color.Black, firstMove: [59] },
+  [PieceName.Queen]: { loc: [60], pcolor: color.Black },
   [PieceName.Rook]: { loc: [56, 63], pcolor: color.Black, firstMove: [56, 63] },
   [PieceName.Knight]: { loc: [57, 62], pcolor: color.Black },
   [PieceName.Bishop]: { loc: [58, 61], pcolor: color.Black },
   [PieceName.Pawn]: {
     loc: [48, 49, 50, 51, 52, 53, 54, 55],
     pcolor: color.Black,
+    firstMove: [48, 49, 50, 51, 52, 53, 54, 55],
     enpassant: [],
   },
 };

@@ -13,6 +13,7 @@ const Bishop: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.Black;
   const name = PieceName.Bishop;
@@ -26,6 +27,7 @@ const Bishop: React.FC<props> = ({
       checkAvailableMove={checkBishopMove}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <Bishopsvg></Bishopsvg>

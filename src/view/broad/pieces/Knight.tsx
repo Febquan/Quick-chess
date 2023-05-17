@@ -13,6 +13,7 @@ const Knight: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.Black;
   const name = PieceName.Knight;
@@ -26,6 +27,7 @@ const Knight: React.FC<props> = ({
       currentId={currentId}
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <Knightsvg></Knightsvg>

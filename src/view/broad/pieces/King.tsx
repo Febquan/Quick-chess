@@ -14,6 +14,7 @@ const King: React.FC<props> = ({
   setCellAttackMove,
   setCellMovable,
   currentId,
+  handleMakeMoveTimer,
 }: props) => {
   const pcolor = color.Black;
   const name = PieceName.King;
@@ -28,6 +29,7 @@ const King: React.FC<props> = ({
       setCellAttackMove={setCellAttackMove}
       setCellMovable={setCellMovable}
       firstMove={true}
+      handleMakeMoveTimer={handleMakeMoveTimer}
     >
       <Wrapper>
         <Kingsvg></Kingsvg>

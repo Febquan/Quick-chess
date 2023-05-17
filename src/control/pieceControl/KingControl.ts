@@ -1,4 +1,3 @@
-import { current } from "@reduxjs/toolkit";
 import {
   idToCoordinate,
   coordinateToId,
@@ -6,12 +5,13 @@ import {
   isExit,
 } from "../../view/broad/utility/helper";
 
-import { color, chessLocations, PieceName } from "../utility/GameData";
+import { color, chessLocations } from "../utility/GameData";
 import { checkBishopMove } from "./BishopControl";
 import { checkKnightMove } from "./Knight Control";
 import { checkPawnMove } from "./PawnControl";
 import { checkQueenMove } from "./QueenControl";
 import { checkRookMove } from "./RookControl";
+// import { PieceName } from "../utility/GameData";
 function pushMove(
   id: number,
   allPieceLoc: chessLocations,
@@ -81,6 +81,23 @@ function getAllNoNoId(
           const color = allPieceLoc[name as PieceName].pcolor;
           const { validMove } = checkQueenMove(allPieceLoc, id, color, true);
           noNoZone.push(...validMove);
+          console.log("hello1");
+        }
+      }
+      if (piece == PieceName.King || piece == PieceName.WhiteKing) {
+        if (site == color.White && piece == PieceName.King) continue;
+        if (site == color.Black && piece == PieceName.WhiteKing) continue;
+        for (const id of loc) {
+          const color = allPieceLoc[name as PieceName].pcolor;
+          const { validMove } = checkKingMove(
+            allPieceLoc,
+            id,
+            color,
+            false,
+            false
+          );
+          noNoZone.push(...validMove);
+          console.log("hello2");
         }
       }
     }
@@ -98,6 +115,7 @@ export const checkKingMove = (
 ) => {
   let validMove: number[] = [];
   let atackMove: number[] = [];
+  console.log("hello1123");
   const noNoMove: number[] = getAllNoNoId(allPieceLoc, pcolor, site);
 
   const { x, y } = idToCoordinate(currentId);
@@ -121,12 +139,13 @@ export const checkKingMove = (
   pushMove(dowLeft, allPieceLoc, pcolor, validMove, atackMove);
 
   //Nhap thanh
+
   if (firstMove) {
     let left = true;
     let right = true;
     for (
       let i = 1;
-      i <= 3;
+      i <= (site == color.White ? 3 : 2);
       i++ //left
     ) {
       if (isExit(coordinateToId(x - i, y), allPieceLoc)) {
@@ -136,7 +155,7 @@ export const checkKingMove = (
     }
     for (
       let i = 1;
-      i <= 2;
+      i <= (site == color.White ? 2 : 3);
       i++ //right
     ) {
       if (isExit(coordinateToId(x + i, y), allPieceLoc)) {
@@ -147,14 +166,13 @@ export const checkKingMove = (
     const rookName =
       pcolor == color.Black ? PieceName.Rook : PieceName.WhiteRook;
     if (right) {
-      const rookId = coordinateToId(x + 3, y);
+      const rookId = coordinateToId(x + (site == color.White ? 3 : 4), y);
       if (allPieceLoc[rookName].firstMove?.includes(rookId)) {
         atackMove.push(rookId);
       }
-      console.log(allPieceLoc, allPieceLoc[rookName].firstMove, rookName);
     }
     if (left) {
-      const rookId = coordinateToId(x - 4, y);
+      const rookId = coordinateToId(x + (site == color.White ? -4 : -3), y);
       if (allPieceLoc[rookName].firstMove?.includes(rookId)) {
         atackMove.push(rookId);
       }
@@ -164,4 +182,67 @@ export const checkKingMove = (
   validMove = validMove.filter((x) => !noNoMove.includes(x));
   atackMove = atackMove.filter((x) => !noNoMove.includes(x));
   return { validMove, atackMove };
+};
+
+type functionCheck = (
+  allPieceLoc: chessLocations,
+  currentId: number,
+  pcolor: color,
+  getPreMove: boolean
+) => {
+  validMove: number[];
+  atackMove: number[];
+};
+enum PieceName {
+  King = "King",
+  WhiteKing = "WhiteKing",
+  Queen = "Queen",
+  WhiteQueen = "WhiteQueen",
+  Rook = "Rook",
+  WhiteRook = "WhiteRook",
+  Knight = "Knight",
+  WhiteKnight = "WhiteKnight",
+  Bishop = "Bishop",
+  WhiteBishop = "WhiteBishop",
+  Pawn = "Pawn",
+  WhitePawn = "WhitePawn",
+}
+
+const ControlMapping: Record<PieceName, functionCheck> = {
+  [PieceName.WhiteQueen]: checkQueenMove,
+  [PieceName.Queen]: checkQueenMove,
+  [PieceName.Rook]: checkRookMove,
+  [PieceName.WhiteRook]: checkRookMove,
+  [PieceName.Bishop]: checkBishopMove,
+  [PieceName.WhiteBishop]: checkBishopMove,
+  [PieceName.Pawn]: checkPawnMove,
+  [PieceName.WhitePawn]: checkPawnMove,
+  [PieceName.Knight]: checkKnightMove,
+  [PieceName.WhiteKnight]: checkKnightMove,
+  [PieceName.King]: checkKingMove,
+  [PieceName.WhiteKing]: checkKingMove,
+};
+
+export const isCheckMate = (allLoc: chessLocations, site: color) => {
+  const allAttackMove = [];
+  for (const name in allLoc) {
+    if (name != PieceName.WhiteKing && name != PieceName.King) {
+      const piece = name as PieceName;
+      const loc = allLoc[piece].loc;
+      const color = allLoc[piece].pcolor;
+      const checkFunction: functionCheck = ControlMapping[piece];
+      for (const id of loc) {
+        const { atackMove } = checkFunction(allLoc, id, color, false);
+        allAttackMove.push(...atackMove);
+      }
+    }
+  }
+  const WhiteKingId = allLoc.WhiteKing.loc[0];
+  const BlackKingId = allLoc.King.loc[0];
+  const BlackKingCheck = allAttackMove.includes(BlackKingId);
+  const WhiteKingCheck = allAttackMove.includes(WhiteKingId);
+  return {
+    isChecked: site == color.Black ? BlackKingCheck : WhiteKingCheck,
+    check: site == color.Black ? WhiteKingCheck : BlackKingCheck,
+  };
 };
