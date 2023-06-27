@@ -260,7 +260,7 @@ const Broad: React.FC<props> = ({
 };
 
 const Shape = styled.div`
-  width: var(--broad-size);
+  min-width: var(--broad-size);
   height: var(--broad-size);
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -270,7 +270,6 @@ const Shape = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-
   box-shadow: 0px 0px 20px hsl(0deg 0% 0% / 0.2);
 `;
 

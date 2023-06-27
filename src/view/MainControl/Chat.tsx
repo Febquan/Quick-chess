@@ -125,7 +125,7 @@ const Chatbox = styled.div`
   flex-direction: column-reverse;
   word-wrap: break-word;
   height: 300px;
-  width: 400px;
+  width: 100%;
   padding: 20px;
   margin-bottom: -3px;
   /* From https://css.glass */
@@ -141,5 +141,6 @@ const Chatbox = styled.div`
 const Relative = styled.div`
   position: relative;
   overflow: hidden;
+  width: 100%;
 `;
 export default Chat;

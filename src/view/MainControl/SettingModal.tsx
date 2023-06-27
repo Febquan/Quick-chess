@@ -33,9 +33,13 @@ const SettingModal: React.FC<props> = ({
     });
   }, [pop]);
 
-  const defaultTime = 90;
-  const defaultPlusTime = 30;
-  const defaultTimeOut = 2;
+  const defaultTime = useSelector((state: RootState) => state.location.time);
+  const defaultPlusTime = useSelector(
+    (state: RootState) => state.location.plusTime
+  );
+  const defaultTimeOut = useSelector(
+    (state: RootState) => state.location.timeOut
+  );
 
   const [time, setTime] = useState<string | number | null>(defaultTime);
   const [plusTime, setPlusTime] = useState<string | number | null>(

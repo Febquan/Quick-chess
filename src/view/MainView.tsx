@@ -6,7 +6,7 @@ import { MySocket } from "../api/socket";
 
 import { useDispatch } from "react-redux";
 import { SocketSlice } from "../store/socket";
-import { locationSlice } from "../store/gameState";
+import { GameState, locationSlice } from "../store/gameState";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 interface TimeRefType {
@@ -26,6 +26,7 @@ const MainView: React.FC = () => {
   };
   const handleTimeOutDone = () => {
     dispatch(locationSlice.actions.setShowTimeOut(false));
+    dispatch(locationSlice.actions.setGameState(GameState.INGAME));
     if (!turn) myOpponentTimer.current?.resumeTime();
     if (turn) myTimer.current?.resumeTime();
   };
@@ -59,5 +60,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 5vw;
+  flex-wrap: wrap;
+  padding: 20px;
 `;
 export default MainView;

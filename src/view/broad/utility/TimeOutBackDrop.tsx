@@ -1,13 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import Timer from "../../MainControl/Timer";
+import { useSelector } from "react-redux";
 
+import { RootState } from "../../../store/store";
 type props = {
   handleExpire: VoidFunction;
 };
 const TimeOutBackDrop: React.FC<props> = ({ handleExpire }) => {
   // const TimeOut = new Date(new Date().getTime() + 3 * 60 * 1000);
-  const TimeOut = new Date(new Date().getTime() + 5 * 1000);
+  const numberOfTime = useSelector(
+    (state: RootState) => state.location.timeOutTime
+  );
+  const TimeOut = new Date(new Date().getTime() + numberOfTime * 60 * 1000);
   return (
     <BackDrop>
       <CusSpan>Timeout</CusSpan>

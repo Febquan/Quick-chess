@@ -66,6 +66,7 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
     setready(false);
     setoponentReady(false);
   };
+
   const handleToggleReady = () => {
     mySocket?.emit("IamReady", roomId);
     setready((prev) => !prev);
@@ -84,6 +85,7 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
     mySocket?.emit("GameStart", roomId);
   };
   const handleCallTimeOut = () => {
+    dispatch(locationSlice.actions.setGameState(GameState.TIMEOUT));
     dispatch(locationSlice.actions.setShowTimeOut(true));
     dispatch(locationSlice.actions.afterUseTimeOut());
     myOpponentTimerRef.current?.pauseTime();
@@ -97,6 +99,9 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
     mySocket?.emit("CallDraw", roomId);
     myOpponentTimerRef.current?.pauseTime();
     myTimerRef.current?.pauseTime();
+  };
+  const handleNoTimeLeft = () => {
+    handleSurrender();
   };
   useEffect(() => {
     const handleSocket = async () => {
@@ -119,6 +124,7 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
       mySocket?.on("OpponentLeave", () => {
         setready(false);
         setoponentReady(false);
+        dispatch(locationSlice.actions.setGameState(GameState.NOTREADY));
       });
       mySocket?.on("GameStart", () => {
         dispatch(locationSlice.actions.setGameState(GameState.INGAME));
@@ -151,6 +157,7 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
       });
       mySocket?.on("OpponentCallTimeOut", () => {
         dispatch(locationSlice.actions.setShowTimeOut(true));
+        dispatch(locationSlice.actions.setGameState(GameState.TIMEOUT));
         myOpponentTimerRef.current?.pauseTime();
         myTimerRef.current?.pauseTime();
       });
@@ -195,7 +202,8 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
               </MyButton>
             </>
           )}
-          {gameState == GameState.INGAME && (
+          {(gameState == GameState.INGAME ||
+            gameState == GameState.TIMEOUT) && (
             <MyCountDowWrapper>
               <Timer
                 autoStart={!turn}
@@ -208,8 +216,10 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
           )}
           {(gameState == GameState.INGAME ||
             gameState == GameState.NOTREADY ||
+            gameState == GameState.TIMEOUT ||
             gameState == GameState.ENDGAME) && <Chat></Chat>}
-          {gameState == GameState.INGAME && (
+          {(gameState == GameState.INGAME ||
+            gameState == GameState.TIMEOUT) && (
             <>
               <MyCountDowWrapper>
                 <Timer
@@ -217,6 +227,7 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
                   ref={myTimerRef}
                   expriryTime={myExpriredTime}
                   plusTime={plusTime}
+                  ExpireFuc={handleNoTimeLeft}
                 />
                 <Turn>{turn ? "⌛" : ""}</Turn>
               </MyCountDowWrapper>
@@ -224,14 +235,25 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
               <Flex>
                 <SubButton
                   onClick={handleCallTimeOut}
-                  disabled={!turn || numberOfTimeOut <= 0}
+                  disabled={
+                    !turn ||
+                    numberOfTimeOut <= 0 ||
+                    gameState != GameState.INGAME
+                  }
                 >
                   Call timeout {numberOfTimeOut}
                 </SubButton>
-                <SubButton disabled={!turn} onClick={handleDraw}>
+                <SubButton
+                  disabled={!turn || gameState != GameState.INGAME}
+                  onClick={handleDraw}
+                >
                   Call for a draw
                 </SubButton>
-                <SubButton danger onClick={handleSurrender}>
+                <SubButton
+                  danger
+                  onClick={handleSurrender}
+                  disabled={gameState != GameState.INGAME}
+                >
                   Surrender
                 </SubButton>
               </Flex>
@@ -249,16 +271,15 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
               <Flex>
                 <SubButton onClick={handleShowSetting}>Game setting</SubButton>
 
-                {roomHost && (
-                  <SubButton
-                    disabled={!(ready && oponentReady)}
-                    onClick={() => {
-                      handkeGameStart();
-                    }}
-                  >
-                    START GAME
-                  </SubButton>
-                )}
+                <SubButton
+                  disabled={!(ready && oponentReady) || !roomHost}
+                  onClick={() => {
+                    handkeGameStart();
+                  }}
+                >
+                  START GAME
+                </SubButton>
+
                 <SubButton onClick={handleLeaveRoom} danger>
                   Leave room
                 </SubButton>
@@ -273,6 +294,7 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
 
 const SubButton = styled(Button)`
   font-weight: bolder;
+  flex: 1;
 `;
 const MyCountDowWrapper = styled.div`
   position: relative;
@@ -297,6 +319,7 @@ const Wrapper = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 3vh;
+  flex-shrink: 10000;
 `;
 const Flex = styled.div`
   display: flex;

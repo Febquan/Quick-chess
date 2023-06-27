@@ -21,7 +21,7 @@ const DrawBackDrop: React.FC<props> = ({
   drawMess,
   setDrawMess,
   continueAfterGame,
-  myTimer,
+
   opponentTimer,
 }) => {
   const socket = useSelector((state: RootState) => state.socket.socket);

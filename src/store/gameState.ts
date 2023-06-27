@@ -27,6 +27,7 @@ type initState = {
   time: number;
   plusTime: number;
   timeOut: number;
+  timeOutTime: number;
   gameState: GameState;
   turn: boolean;
   isTimeOut: boolean;
@@ -40,13 +41,15 @@ export enum GameState {
   NOTREADY,
   READY,
   INGAME,
+  TIMEOUT,
   ENDGAME,
 }
 export const initialState: initState = {
   site: color.White,
   allPieceLoc: WhiteChessLocation,
-  time: 90,
+  time: 0.1,
   plusTime: 30,
+  timeOutTime: 3, //min
   timeOut: 2,
   gameState: GameState.FINDGAME,
   turn: false,
