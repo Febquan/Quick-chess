@@ -14,8 +14,8 @@ const LoginModal: React.FC<props> = ({
   open: isModalOpen,
   myOnCancel: handleCancel,
 }) => {
-  const [pop, contextHolder] = notification.useNotification();
   const dispatch = useDispatch();
+  const [pop, contextHolder] = notification.useNotification();
   const openSuscessNoti = () => {
     pop["success"]({
       message: "Đăng nhập thành công",

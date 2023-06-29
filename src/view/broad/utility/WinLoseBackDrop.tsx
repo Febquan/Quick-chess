@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { useEffect } from "react";
 import React from "react";
 import styled from "styled-components";
 
@@ -8,11 +8,19 @@ type props = {
   mess: string;
 };
 const WinLoseBackDrop: React.FC<props> = ({ win, continueAfterGame, mess }) => {
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      continueAfterGame();
+    }, 2500);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [continueAfterGame]);
   return (
     <BackDrop>
       <CusSpan>{win ? "🏆 YOU WIN 🏆" : "GG"}</CusSpan>
       <span>{mess}</span>
-      <Button onClick={continueAfterGame}>continue</Button>
     </BackDrop>
   );
 };

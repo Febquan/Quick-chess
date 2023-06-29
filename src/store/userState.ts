@@ -22,6 +22,12 @@ const userSlice = createSlice({
     setName(state, action) {
       state.name = action.payload;
     },
+    addElo(state, action) {
+      state.elo = state.elo + action.payload;
+    },
+    setElo(state, action) {
+      state.elo = action.payload;
+    },
   },
 });
 

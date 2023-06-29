@@ -1,8 +1,11 @@
 import React, { ReactNode } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/store";
+import { userSlice } from "../../store/userState";
+import { locationSlice } from "../../store/gameState";
+import { GameState } from "../../store/gameState";
 
 import { Button } from "antd";
 import Login from "./LoginModal";
@@ -18,30 +21,33 @@ type props = {
 };
 
 const Header: React.FC<props> = ({ children, toggleTheme, theme }) => {
-  const { isLogin, name } = useSelector((state: RootState) => ({
-    ...state.user,
-  }));
-
+  const isLogin = useSelector((state: RootState) => state.user.isLogin);
+  const name = useSelector((state: RootState) => state.user.name);
+  const elo = useSelector((state: RootState) => state.user.elo);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isSignUpModalOpen, setisSignUpModalOpen] = useState<boolean>(false);
+  const roomId = useSelector((state: RootState) => state.location.roomId);
+  const mySocket = useSelector((state: RootState) => state.socket.socket);
+
+  const site = useSelector((state: RootState) => state.location.site);
+  const dispatch = useDispatch();
   const showLoginModal = () => {
     setIsLoginModalOpen(true);
   };
 
-  const handleLoginOk = () => {
-    setIsLoginModalOpen(false);
+  const onLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(userSlice.actions.setLogin(false));
+    mySocket?.emit("LeaveRoom", roomId);
+    dispatch(locationSlice.actions.setGameState(GameState.FINDGAME));
+    dispatch(locationSlice.actions.resetLoc(site));
   };
-
   const handleLoginCancel = () => {
     setIsLoginModalOpen(false);
   };
 
   const showSignUpModal = () => {
     setisSignUpModalOpen(true);
-  };
-
-  const handleSignUpOk = () => {
-    setisSignUpModalOpen(false);
   };
 
   const handleSignUpCancel = () => {
@@ -66,20 +72,36 @@ const Header: React.FC<props> = ({ children, toggleTheme, theme }) => {
               </MyButton>
             </>
           )}
-          {isLogin && <span>Welcome back {name}</span>}
+          {isLogin && (
+            <>
+              <Flex2>
+                <span>Welcome back {name}</span>
+                &nbsp; &nbsp;&nbsp;
+                <span> Current elo : {elo}</span>
+              </Flex2>
+            </>
+          )}
         </Height>
-        <Button
-          type="primary"
-          onClick={toggleTheme}
-          style={{ backgroundColor: "white" }}
-        >
-          <ImgHolder>
-            <MyImg
-              src={!theme ? "./../../../bulb (1).png" : "./../../../bulb.png"}
-              alt="blub-icon"
-            />
-          </ImgHolder>
-        </Button>
+        <Height>
+          <MyButton
+            type="primary"
+            onClick={toggleTheme}
+            style={{ backgroundColor: "white" }}
+          >
+            <ImgHolder>
+              <MyImg
+                src={!theme ? "./../../../bulb (1).png" : "./../../../bulb.png"}
+                alt="blub-icon"
+              />
+            </ImgHolder>
+          </MyButton>
+          {isLogin && (
+            <MyButton onClick={onLogout}>
+              <span>Logout</span>
+            </MyButton>
+          )}
+        </Height>
+
         <Login open={isLoginModalOpen} myOnCancel={handleLoginCancel}></Login>
         <SignUp
           open={isSignUpModalOpen}
@@ -93,7 +115,7 @@ const Header: React.FC<props> = ({ children, toggleTheme, theme }) => {
 
 const ImgHolder = styled.div`
   height: 90%;
-  width: 10px;
+  width: 20px;
 
   display: flex;
   justify-content: center;
@@ -110,6 +132,13 @@ const Flex = styled.div`
     font-size: larger;
   }
 `;
+const Flex2 = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 70%;
+`;
 const MyButton = styled(Button)`
   height: 100%;
   width: fit-content;
@@ -122,12 +151,13 @@ const MyButton = styled(Button)`
 `;
 const MyImg = styled.img`
   object-fit: cover;
-  height: 80%;
+  height: 90%;
 `;
 const Height = styled.div`
   height: 60%;
   display: flex;
   gap: 10px;
+  align-items: center;
 `;
 
 const Wrapper = styled.div`

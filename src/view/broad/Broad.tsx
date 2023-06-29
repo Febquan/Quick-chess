@@ -1,22 +1,22 @@
 import React from "react";
 import styled from "styled-components";
-import Cell from "./Cell";
-
-import { useState, useEffect, useCallback } from "react";
-
-import { pieceMapping, PieceName } from "../../control/utility/GameData";
-
-import { color } from "../../control/utility/GameData";
 import { useDispatch } from "react-redux";
-
-import PawnPromo from "./utility/PawnPromo";
+import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import TimeOutBackDrop from "./utility/TimeOutBackDrop";
-
-import WinLoseBackDrop from "./utility/WinLoseBackDrop";
 import { GameState, locationSlice } from "../../store/gameState";
+import api from "../../api/api";
+
+import { pieceMapping, PieceName } from "../../control/utility/GameData";
+import { color } from "../../control/utility/GameData";
+
+import Cell from "./Cell";
+import PawnPromo from "./utility/PawnPromo";
+import TimeOutBackDrop from "./utility/TimeOutBackDrop";
+import WinLoseBackDrop from "./utility/WinLoseBackDrop";
 import DrawBackDrop from "./utility/DrawBackDrop";
+import { userSlice } from "../../store/userState";
+
 interface TimeRefType {
   addTime: () => void;
   pauseTime: () => void;
@@ -34,6 +34,8 @@ const Broad: React.FC<props> = ({
   myTimer,
   opponentTimer,
 }) => {
+  const EloWin = 30;
+  const EloLose = -30;
   const [cells, setCells] = useState<JSX.Element[]>([]);
   const [showGameResult, setShowGameResult] = useState<boolean>(false);
   const [win, setWin] = useState<boolean>(false);
@@ -49,7 +51,6 @@ const Broad: React.FC<props> = ({
   const showTimeOut = useSelector(
     (state: RootState) => state.location.isTimeOut
   );
-  const gameState = useSelector((state: RootState) => state.location.gameState);
   const [showPawnPromo, setPawnPromo] = useState<{
     show: boolean;
     id: number;
@@ -57,6 +58,16 @@ const Broad: React.FC<props> = ({
   }>({ show: false, id: -1, pcolor: color.Black });
 
   const dispatch = useDispatch();
+  const userName = useSelector((state: RootState) => state.user.name);
+
+  const ChangeElo = useCallback(
+    (eloDif: number) => {
+      dispatch(userSlice.actions.addElo(eloDif));
+      api.post("user/changeElo", { userName: userName, eloChange: eloDif });
+    },
+    [dispatch, userName]
+  );
+
   const handleShowPawnPromo = (id: number, pcolor: color) => {
     setPawnPromo((prev) => {
       return { show: !prev.show, id, pcolor };
@@ -71,9 +82,11 @@ const Broad: React.FC<props> = ({
       setWin(true);
       setShowGameResult(true);
       socket?.emit("IBeatYou", roomId);
+
+      ChangeElo(EloWin);
       return;
     }
-  }, [site, chessLoc, dispatch, socket, roomId]);
+  }, [ChangeElo, chessLoc, dispatch, roomId, site, socket]);
   useEffect(() => {
     //draw cells
     const newCells = [];
@@ -109,7 +122,7 @@ const Broad: React.FC<props> = ({
       }
     }
     checkGameWin();
-  }, [site, dispatch, gameState, chessLoc, handleMakeMoveTimer, checkGameWin]);
+  }, [checkGameWin, chessLoc, handleMakeMoveTimer]);
 
   const addToCell = (id: number, piece: JSX.Element) => {
     setCells((prevCell) => {
@@ -168,14 +181,15 @@ const Broad: React.FC<props> = ({
       return [...newCells];
     });
   };
-  const continueAfterGame = () => {
+  const continueAfterGame = useCallback(() => {
     dispatch(locationSlice.actions.setGameState(GameState.NOTREADY));
     setShowGameResult(false);
     dispatch(locationSlice.actions.resetLoc(site));
+    setPawnPromo({ ...showPawnPromo, show: false });
     setMess("");
     setDrawMess("");
     setShowDraw(false);
-  };
+  }, [dispatch, showPawnPromo, site]);
   const handleShowDraw = (show: boolean) => {
     setShowDraw(show);
   };
@@ -184,11 +198,8 @@ const Broad: React.FC<props> = ({
     socket?.on("YouLose", () => {
       setWin(false);
       setShowGameResult(true);
-
       dispatch(locationSlice.actions.setGameState(GameState.ENDGAME));
-      return () => {
-        socket.off("YouLose");
-      };
+      ChangeElo(EloLose);
     });
     socket?.on("EnemySurrender", (mess) => {
       setMess(mess);
@@ -196,11 +207,11 @@ const Broad: React.FC<props> = ({
       setShowGameResult(true);
       dispatch(locationSlice.actions.setGameState(GameState.ENDGAME));
       socket?.emit("IBeatYou", roomId);
+      ChangeElo(EloWin);
     });
     socket?.on("OpponentCallDraw", () => {
       handleShowDraw(true);
       opponentTimer.current?.pauseTime();
-      console.log("HELELLELE");
     });
     socket?.on("DeclineCallDraw", () => {
       handleShowDraw(true);
@@ -214,11 +225,27 @@ const Broad: React.FC<props> = ({
       handleShowDraw(true);
       setDrawMess("Draw !");
     });
+    socket?.on("OpponentLeave", () => {
+      continueAfterGame();
+    });
     return () => {
       socket?.off("YouLose");
       socket?.off("EnemySurrender");
+      socket?.off("OpponentCallDraw");
+      socket?.off("DeclineCallDraw");
+      socket?.off("AcceptCallDraw");
+      socket?.off("OpponentLeave");
     };
-  }, [opponentTimer, dispatch, roomId, socket, myTimer]);
+  }, [
+    ChangeElo,
+    EloLose,
+    continueAfterGame,
+    dispatch,
+    myTimer,
+    opponentTimer,
+    roomId,
+    socket,
+  ]);
 
   return (
     <>

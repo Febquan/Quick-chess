@@ -56,6 +56,7 @@ const SignUpModal: React.FC<props> = ({
   //USERNAME
   const userNameValue = Form.useWatch("userName", form);
   const [isvalidUser, setIsvalidUser] = useState<boolean>(false);
+  const [mes, setMes] = useState<string>("");
   const [isfirstUser, setisfirstUser] = useState<boolean>(true);
   const handleSetFirstUser = () => {
     if (isfirstUser) setisfirstUser(false);
@@ -71,6 +72,7 @@ const SignUpModal: React.FC<props> = ({
           setIsvalidUser(true);
         } else {
           setIsvalidUser(false);
+          setMes(data.message);
         }
       } catch (err) {
         console.log(err);
@@ -188,9 +190,7 @@ const SignUpModal: React.FC<props> = ({
           validateStatus={
             isfirstUser ? undefined : isvalidUser ? "success" : "error"
           }
-          help={
-            isfirstUser ? undefined : isvalidUser ? "" : "Tên đã được sử dụng!"
-          }
+          help={isfirstUser ? undefined : isvalidUser ? "" : mes}
           rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input onInput={handleSetFirstUser} />

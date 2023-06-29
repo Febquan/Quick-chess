@@ -86,6 +86,7 @@ const GlobalStyle = styled.createGlobalStyle`
     @media (max-width: 959px) {
       --broad-size: 90vw;
       --piece-size: 3.6vw;
+      --header-height: 10vh;
     }
   }
 

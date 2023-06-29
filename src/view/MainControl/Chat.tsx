@@ -30,6 +30,16 @@ const Chat: React.FC<props> = () => {
           ...prev,
         ]);
       });
+      socket?.on("HeIntroduce", ({ name, elo }) => {
+        setallMessage((prev) => [
+          <ServerChat key={prev.length + 1}>
+            <span>
+              Room hosted by {name} elo {elo}
+            </span>
+          </ServerChat>,
+          ...prev,
+        ]);
+      });
     };
     handleReciveMess();
     return () => {

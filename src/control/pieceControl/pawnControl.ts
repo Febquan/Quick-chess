@@ -24,13 +24,15 @@ export const checkPawnMove = (
   if (!getPreMove) {
     //move
     const moveLength = firstMove ? 2 : 1;
-    for (let i = moveLength; i > 0; i--) {
+    for (let i = 1; i <= moveLength; i++) {
       const id = coordinateToId(x, y + i * dir);
 
       if (!isExit(id, allPieceLoc)) {
         if (id != -1) {
           validMove.push(id);
         }
+      } else {
+        break;
       }
     }
     //attack
