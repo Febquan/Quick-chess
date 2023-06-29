@@ -40,8 +40,7 @@ export const checkRookMove = (
   allPieceLoc: chessLocations,
   currentId: number,
   pcolor: color,
-  getPreMove: boolean,
-  firstMove?: boolean
+  getPreMove: boolean
 ) => {
   const validMove: number[] = [];
   const atackMove: number[] = [];

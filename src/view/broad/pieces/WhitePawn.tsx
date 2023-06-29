@@ -9,8 +9,6 @@ import { checkPawnMove } from "../../../control/pieceControl/PawnControl";
 import { PieceName, color } from "../../../control/utility/GameData";
 import Draggable from "../utility/Drag";
 
-type PawnProps = props & { handleShowPawnPromo: VoidFunction };
-
 const WhitePawn: React.FC<props> = ({
   addToCell,
   removefromCell,

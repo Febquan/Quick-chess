@@ -54,7 +54,6 @@ const MainControl: React.FC<props> = ({ myTimerRef, myOpponentTimerRef }) => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const PrivateRoomId = Form.useWatch("privateRoomId", form);
 
