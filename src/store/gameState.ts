@@ -47,7 +47,7 @@ export enum GameState {
 export const initialState: initState = {
   site: color.White,
   allPieceLoc: WhiteChessLocation,
-  time: 0.1,
+  time: 30,
   plusTime: 30,
   timeOutTime: 3, //min
   timeOut: 2,
