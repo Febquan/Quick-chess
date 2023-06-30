@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosError } from "axios";
 
 // Create a new Axios instance
 const api: AxiosInstance = axios.create({
-  baseURL: "http://localhost:8080/", // Set your API base URL
+  baseURL: import.meta.env.VITE_BACK_END_URL, // Set your API base URL
   timeout: 5000, // Set a reasonable timeout value
 });
 

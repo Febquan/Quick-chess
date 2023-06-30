@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 
 import MainView from "./view/MainView";
-import Header from "./view/Header/Header";
+import Header from "./view/header/Header";
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<MyTheme>(MyTheme.Dark);
