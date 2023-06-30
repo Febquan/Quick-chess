@@ -21,7 +21,7 @@ import WhiteKing from "../pieces/WhiteKing";
 import store from "../../../store/store";
 
 const audio = new Audio("../../../sound/move-self.mp3");
-import { isCheckMate } from "../../../control/pieceControl/kingControl";
+import { isCheckMate } from "../../../control/piece-control/kingControl";
 import {
   coordinateToId,
   getBoardSize,

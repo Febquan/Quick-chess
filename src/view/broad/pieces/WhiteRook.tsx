@@ -6,7 +6,7 @@ import Draggable from "../utility/Drag";
 
 import { props } from "./types";
 import { PieceName, color } from "../../../control/utility/GameData";
-import { checkRookMove } from "../../../control/pieceControl/rookControl";
+import { checkRookMove } from "../../../control/piece-control/rookControl";
 const WhiteRook: React.FC<props> = ({
   addToCell,
   removefromCell,

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Timer from "../../MainControl/Timer";
+import Timer from "../../main-control/Timer";
 import { useSelector } from "react-redux";
 
 import { RootState } from "../../../store/store";

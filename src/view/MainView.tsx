@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Broad from "./broad/Broad";
-import MainControl from "./MainControl/MainControl";
+import MainControl from "./main-control/MainControl";
 import { MySocket } from "../api/socket";
 import api from "../api/api";
 import { Tag } from "antd";
