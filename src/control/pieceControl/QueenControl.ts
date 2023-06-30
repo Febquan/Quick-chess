@@ -1,6 +1,6 @@
 import { color, chessLocations } from "../utility/GameData";
-import { checkBishopMove } from "./BishopControl";
-import { checkRookMove } from "./RookControl";
+import { checkBishopMove } from "./bishopControl";
+import { checkRookMove } from "./rookControl";
 
 export const checkQueenMove = (
   allPieceLoc: chessLocations,

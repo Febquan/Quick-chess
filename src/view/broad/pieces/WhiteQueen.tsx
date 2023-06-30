@@ -7,7 +7,7 @@ import Draggable from "../utility/Drag";
 import { props } from "./types";
 import { PieceName, color } from "../../../control/utility/GameData";
 
-import { checkQueenMove } from "../../../control/pieceControl/QueenControl";
+import { checkQueenMove } from "../../../control/pieceControl/queenControl";
 const WhiteQueen: React.FC<props> = ({
   addToCell,
   removefromCell,

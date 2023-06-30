@@ -6,7 +6,7 @@ import Draggable from "../utility/Drag";
 
 import { props } from "./types";
 import { PieceName, color } from "../../../control/utility/GameData";
-import { checkKingMove } from "../../../control/pieceControl/KingControl";
+import { checkKingMove } from "../../../control/pieceControl/kingControl";
 
 const King: React.FC<props> = ({
   addToCell,

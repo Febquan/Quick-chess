@@ -6,11 +6,11 @@ import {
 } from "../../view/broad/utility/helper";
 
 import { color, chessLocations } from "../utility/GameData";
-import { checkBishopMove } from "./BishopControl";
-import { checkKnightMove } from "./Knight Control";
-import { checkPawnMove } from "./PawnControl";
-import { checkQueenMove } from "./QueenControl";
-import { checkRookMove } from "./RookControl";
+import { checkBishopMove } from "./bishopControl";
+import { checkKnightMove } from "./knightControl";
+import { checkPawnMove } from "./pawnControl";
+import { checkQueenMove } from "./queenControl";
+import { checkRookMove } from "./rookControl";
 // import { PieceName } from "../utility/GameData";
 function pushMove(
   id: number,

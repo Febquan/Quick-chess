@@ -6,7 +6,7 @@ import Draggable from "../utility/Drag";
 import { props } from "./types";
 import { PieceName, color } from "../../../control/utility/GameData";
 
-import { checkBishopMove } from "../../../control/pieceControl/BishopControl";
+import { checkBishopMove } from "../../../control/pieceControl/bishopControl";
 const Bishop: React.FC<props> = ({
   addToCell,
   removefromCell,

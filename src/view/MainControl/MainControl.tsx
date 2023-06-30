@@ -21,7 +21,7 @@ interface props {
   myTimerRef: React.RefObject<TimeRefType>;
   myOpponentTimerRef: React.RefObject<TimeRefType>;
 }
-import { isCheckMate } from "../../control/pieceControl/KingControl";
+import { isCheckMate } from "../../control/pieceControl/kingControl";
 interface TimeRefType {
   addTime: () => void;
   pauseTime: () => void;
